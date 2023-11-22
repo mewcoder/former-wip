@@ -11,10 +11,10 @@
       </div>
     </header>
     <main class="container">
-      <div class="editor">
+      <div id="editor">
         <MonocoEditor v-model="jsonStr" />
       </div>
-      <div class="preview">
+      <div id="preview">
         <SchemaRender
           :key="curUI"
           ref="formRef"
@@ -28,12 +28,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import MonocoEditor from '@/components/MonacoEditor/index.vue'
 import base from './schema/base.json'
 import { SchemaRender } from '@/lib'
 import epConfig from '@/lib/configs/element-plus'
 import antdvConfig from '@/lib/configs/antdv'
+import Split from 'split.js'
+
+onMounted(() => {
+  Split(['#editor', '#preview'], { minSize: 350,gutterSize: 14, })
+})
 
 const jsonStr = ref(JSON.stringify(base, null, 2))
 
@@ -92,14 +97,14 @@ const test = async () => {
 .container {
   height: calc(100% - 50px);
   display: flex;
-  .editor {
+  #editor {
     width: 50%;
     height: 100%;
   }
 
-  .preview {
-    border-left: 1px solid darkgray;
-    width: 50%;
+  #preview {
+    z-index: 10;
+    // width: 50%;
     height: 100%;
     background-color: #fff;
     padding: 24px 48px;
@@ -107,4 +112,15 @@ const test = async () => {
   }
 }
 </style>
-@/lib/configs/element-plus@/lib/configs/antdv
+<style>
+.gutter {
+  background-color: #eee;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  cursor: col-resize;
+}
+</style>
