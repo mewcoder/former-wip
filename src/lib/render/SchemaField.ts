@@ -63,7 +63,7 @@ export default defineComponent({
     const renderField = () =>
       h(Field, {
         schema: props.schema,
-        basePath: props.basePath,
+        basePath: props.prop ? [...props.basePath, props.prop] : props.basePath,
         prop: prop.value,
         showWrapper: props.showWrapper
       })

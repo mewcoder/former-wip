@@ -26,7 +26,6 @@ export default defineComponent({
     const add = () => list.value.push(Math.random())
 
     const remove = (i: number) => {
-      console.log(i, list.value)
       list.value.splice(i, 1)
       getValue(ctx.formData, props.basePath).splice(i, 1)
     }
