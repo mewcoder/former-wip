@@ -27,7 +27,7 @@ export default defineComponent({
 
     const remove = (i: number) => {
       list.value.splice(i, 1)
-      getValue(ctx.formData, props.basePath).splice(i, 1)
+      getValue(ctx.formData, props.basePath)?.splice(i, 1)
     }
 
     return () =>

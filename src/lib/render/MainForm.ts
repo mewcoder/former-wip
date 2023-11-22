@@ -9,7 +9,7 @@ import {
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
 import { getComponent, getMappingProp } from '../utils'
-import SchemaField from './SchemaField'
+import ObjectField from './ObjectField'
 import type { WidgetsConfig, Schema } from '../types'
 
 export default defineComponent({
@@ -17,12 +17,12 @@ export default defineComponent({
   props: {
     schema: {
       type: Object as PropType<Schema>,
-      require: true
+      required: true
     },
     widgetsConfig: {
       type: Object as PropType<WidgetsConfig>,
       default: () => ({}),
-      require: true
+      required: true
     }
   },
   inheritAttrs: true,
@@ -68,9 +68,8 @@ export default defineComponent({
           )
         },
         () => [
-          h(SchemaField, {
+          h(ObjectField, {
             schema: props.schema,
-            showFormItem: false,
             showWrapper: false
           }),
           slots.default && slots.default()

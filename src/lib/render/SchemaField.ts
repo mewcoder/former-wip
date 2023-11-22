@@ -12,6 +12,7 @@ import BasicField from './BasicField'
 import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
 import type { Schema } from '../types'
+import { ElCol } from 'element-plus'
 
 // 递归渲染
 export default defineComponent({
@@ -23,7 +24,7 @@ export default defineComponent({
     },
     prop: {
       type: String,
-      default: ''
+      required: true
     },
     basePath: {
       type: Array as PropType<string[]>,
@@ -54,6 +55,10 @@ export default defineComponent({
       Field = BasicField // 普通表单项
     }
 
+    const isNest = computed(() => {
+      return isObjectField(props.schema) || isArrayField(props.schema)
+    })
+
     const prop = computed(() => {
       if (isObjectField(props.schema) || isArrayField(props.schema))
         return undefined
@@ -63,7 +68,7 @@ export default defineComponent({
     const renderField = () =>
       h(Field, {
         schema: props.schema,
-        basePath: props.prop ? [...props.basePath, props.prop] : props.basePath,
+        basePath: [...props.basePath, props.prop],
         prop: prop.value,
         showWrapper: props.showWrapper
       })
@@ -77,14 +82,16 @@ export default defineComponent({
       const propKey = getMappingProp(ctx.config, 'form-item', 'prop', 'prop')
 
       return () =>
-        h(
-          FormItem,
-          {
-            ...presetProps,
-            label: props.schema.title,
-            [propKey]: prop.value
-          },
-          () => renderField()
+        h(ElCol, { span: isNest.value ? 24 : 12 }, () =>
+          h(
+            FormItem,
+            {
+              ...presetProps,
+              label: props.schema.title,
+              [propKey]: prop.value
+            },
+            () => renderField()
+          )
         )
     } else {
       // 直接渲染

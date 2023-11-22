@@ -2,6 +2,7 @@ import { defineComponent, h, type PropType } from 'vue'
 import SchemaField from './SchemaField'
 import ObjectBox from '../components/ObjectBase.vue'
 import type { Schema } from '../types'
+import { ElRow } from 'element-plus'
 
 export default defineComponent({
   name: 'ObjectField',
@@ -22,13 +23,14 @@ export default defineComponent({
   inheritAttrs: false,
   setup(props) {
     const renderFieldList = () => {
-      return Object.entries(props.schema?.properties || {}).map(
-        ([key, field]) =>
+      return h(ElRow, { gutter: 16 }, () =>
+        Object.entries(props.schema?.properties || {}).map(([key, field]) =>
           h(SchemaField, {
             prop: key,
             schema: field,
             basePath: props.basePath
           })
+        )
       )
     }
 

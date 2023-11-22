@@ -5,7 +5,7 @@ const config: WidgetsConfig = {
     'form': {
       widget: 'a-form',
       props: {
-        layout: 'horizontal'
+        layout: 'vertical'
       },
       propMapping: {
         model: 'model'
