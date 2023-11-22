@@ -1,0 +1,123 @@
+{
+  "type": "object",
+  "properties": {
+    "inputKey": {
+      "title": "输入框",
+      "type": "string",
+      "widget": "input"
+    },
+    "numberKey": {
+      "title": "数字输入框",
+      "type": "number",
+      "widget": "input-number"
+    },
+    "nest": {
+      "title": "嵌套对象",
+      "description": "测试对象嵌套功能",
+      "type": "object",
+      "properties": {
+        "nest1": {
+          "title": "输入框",
+          "type": "string",
+          "widget": "input"
+        },
+        "nest2": {
+          "title": "数字输入框",
+          "type": "number",
+          "widget": "input-number"
+        }
+      }
+    },
+    "listKey": {
+      "title": "嵌套字符串数组",
+      "description": "测试对象数组嵌套功能",
+      "type": "array",
+      "min": 1,
+      "max": 3,
+      "items": {
+        "type": "string",
+        "widget": "input"
+      }
+    },
+    "listKey2": {
+      "title": "嵌套对象数组",
+      "description": "测试对象数组嵌套功能",
+      "type": "array",
+      "min": 1,
+      "max": 3,
+      "items": {
+        "type": "object",
+        "properties": {
+          "nest1": {
+            "title": "输入框",
+            "type": "string",
+            "widget": "input"
+          },
+          "nest2": {
+            "title": "数字输入框",
+            "type": "number",
+            "widget": "input-number"
+          }
+        }
+      }
+    },
+    "selectKey": {
+      "title": "下拉单选",
+      "type": "string",
+      "widget": "select",
+      "props": {
+        "options": [
+          { "label": "早", "value": "a" },
+          { "label": "中", "value": "b" },
+          { "label": "晚", "value": "c" }
+        ]
+      }
+    },
+    "selectKey2": {
+      "title": "下拉多选",
+      "type": "array",
+      "widget": "multi-select",
+      "props": {
+        "options": [
+          { "label": "北京", "value": "a" },
+          { "label": "上海", "value": "b" },
+          { "label": "杭州", "value": "c" }
+        ]
+      }
+    },
+    "radioKey": {
+      "title": "点击单选",
+      "type": "string",
+      "widget": "radio-group",
+      "props": {
+        "options": [
+          { "label": "早", "value": "a" },
+          { "label": "中", "value": "b" },
+          { "label": "晚", "value": "c" }
+        ]
+      }
+    },
+    "checkboxKey": {
+      "title": "点击多选",
+      "type": "array",
+      "widget": "checkbox-group",
+      "props": {
+        "options": [
+          { "label": "北京", "value": "a" },
+          { "label": "上海", "value": "b" },
+          { "label": "杭州", "value": "c" }
+        ]
+      }
+    },
+    "switchKey": {
+      "title": "长文本输入框",
+      "type": "boolean",
+      "widget": "switch"
+    },
+    "textareaKey": {
+      "title": "长文本输入框",
+      "type": "string",
+      "widget": "textarea"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+<template>
+  <div ref="editorRef" class="edit-container"></div>
+</template>
+
+<script setup lang="ts">
+import { ref, watch, onMounted } from 'vue'
+import * as monaco from 'monaco-editor'
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+
+const props = defineProps<{
+  modelValue: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', val: string): void
+}>()
+
+// @ts-ignore
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === 'json') {
+      return new jsonWorker()
+    }
+    return new editorWorker()
+  }
+}
+
+const editorRef = ref()
+
+let monacoEditor: any = null
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    // 防止改变编辑器内容时光标重定向
+    if (value !== monacoEditor?.getValue()) {
+      monacoEditor.setValue(value)
+    }
+  }
+)
+
+onMounted(() => {
+  monacoEditor = monaco.editor.create(editorRef.value, {
+    value: props.modelValue,
+    readOnly: false,
+    language: 'json',
+    theme: 'vs',
+    selectOnLineNumbers: true,
+    renderSideBySide: false
+  })
+  // 监听值变化
+  monacoEditor.onDidChangeModelContent(() => {
+    const currenValue = monacoEditor?.getValue()
+    emit('update:modelValue', currenValue)
+  })
+})
+</script>
+
+<style scoped>
+.edit-container {
+  width: 100%;
+  height: 100%;
+}
+</style>
