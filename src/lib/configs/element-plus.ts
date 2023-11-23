@@ -9,6 +9,18 @@ const config: WidgetsConfig = {
       }
     },
     'form-item': 'el-form-item',
+    'row': {
+      widget: 'el-row',
+      props: {
+        gutter: 16
+      }
+    },
+    'col': {
+      widget: 'el-col',
+      props: {
+        span: 16
+      }
+    },
     'input': 'el-input',
     'textarea': {
       widget: 'el-input',

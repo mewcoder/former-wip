@@ -1,5 +1,5 @@
 <template>
-  <div ref="editorRef" class="edit-container"></div>
+  <div ref="editorRef" id="edit-container"></div>
 </template>
 
 <script setup lang="ts">
@@ -47,7 +47,7 @@ onMounted(() => {
     language: 'json',
     theme: 'vs',
     selectOnLineNumbers: true,
-    renderSideBySide: false
+    automaticLayout: true
   })
   // 监听值变化
   monacoEditor.onDidChangeModelContent(() => {
@@ -58,8 +58,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.edit-container {
-  width: 100%;
+#edit-container {
   height: 100%;
 }
 </style>

@@ -75,14 +75,23 @@ export default defineComponent({
 
     // 包裹 FormItem
     if (props.showFormItem) {
+      const { Component: Col, presetProps: colPresetProps } = getComponent(
+        'col',
+        ctx.config
+      )
+
+      // 嵌套数组和对象 占位
+      const spanConfig = isNest.value ? { span: 24 } : {}
+
       const { Component: FormItem, presetProps } = getComponent(
         'form-item',
         ctx.config
       )
+
       const propKey = getMappingProp(ctx.config, 'form-item', 'prop', 'prop')
 
       return () =>
-        h(ElCol, { span: isNest.value ? 24 : 12 }, () =>
+        h(Col, { ...colPresetProps, ...spanConfig }, () =>
           h(
             FormItem,
             {

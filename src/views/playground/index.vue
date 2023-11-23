@@ -37,7 +37,7 @@ import antdvConfig from '@/lib/configs/antdv'
 import Split from 'split.js'
 
 onMounted(() => {
-  Split(['#editor', '#preview'], { minSize: 350,gutterSize: 14, })
+  Split(['#editor', '#preview'], { minSize: 350, gutterSize: 14 })
 })
 
 const jsonStr = ref(JSON.stringify(base, null, 2))
@@ -98,13 +98,11 @@ const test = async () => {
   height: calc(100% - 50px);
   display: flex;
   #editor {
-    width: 50%;
     height: 100%;
   }
 
   #preview {
     z-index: 10;
-    // width: 50%;
     height: 100%;
     background-color: #fff;
     padding: 24px 48px;

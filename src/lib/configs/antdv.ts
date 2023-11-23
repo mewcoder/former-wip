@@ -17,6 +17,12 @@ const config: WidgetsConfig = {
         prop: 'name'
       }
     },
+    'row': {
+      widget: 'el-row'
+    },
+    'col': {
+      widget: 'el-col'
+    },
     'input': 'a-input',
     'textarea': 'a-textarea',
     'input-number': 'a-input-number',

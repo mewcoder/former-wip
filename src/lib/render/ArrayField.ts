@@ -30,6 +30,9 @@ export default defineComponent({
       getValue(ctx.formData, props.basePath)?.splice(i, 1)
     }
 
+    // 数组元素是基本类型
+    const isBasic = props.schema?.items?.type !== 'object'
+
     return () =>
       h(
         ArrayBase,
@@ -48,7 +51,7 @@ export default defineComponent({
               basePath: props.basePath,
               prop: prop + '',
               showWrapper: false,
-              showFormItem: false
+              showFormItem: isBasic
             })
         }
       )

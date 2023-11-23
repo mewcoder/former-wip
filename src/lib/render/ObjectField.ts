@@ -1,8 +1,10 @@
-import { defineComponent, h, type PropType } from 'vue'
+import { defineComponent, inject, h, type PropType } from 'vue'
 import SchemaField from './SchemaField'
 import ObjectBox from '../components/ObjectBase.vue'
 import type { Schema } from '../types'
-import { ElRow } from 'element-plus'
+
+import { getComponent, getMappingProp } from '../utils'
+import { ContextSymbol } from '../shared/context'
 
 export default defineComponent({
   name: 'ObjectField',
@@ -22,8 +24,12 @@ export default defineComponent({
   },
   inheritAttrs: false,
   setup(props) {
+    const ctx = inject(ContextSymbol, {})
+
+    const { Component: Row, presetProps } = getComponent('row', ctx.config)
+
     const renderFieldList = () => {
-      return h(ElRow, { gutter: 16 }, () =>
+      return h(Row, { ...presetProps }, () =>
         Object.entries(props.schema?.properties || {}).map(([key, field]) =>
           h(SchemaField, {
             prop: key,
