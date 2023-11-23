@@ -1,6 +1,4 @@
-import { type WidgetsConfig } from '../types'
-
-const config: WidgetsConfig = {
+export default {
   widgets: {
     'form': {
       widget: 'a-form',
@@ -50,5 +48,3 @@ const config: WidgetsConfig = {
   },
   defaultModelProp: 'value' // v-model:value
 }
-
-export default config

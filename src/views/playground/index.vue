@@ -1,7 +1,17 @@
 <template>
   <div class="playground">
     <header class="bar">
-      <div class="title">VueFormer playGround</div>
+      <div class="title">
+        <span style="margin-right: 20px">🎮 VueFormer Playground</span>
+        <el-select v-model="curJson">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
       <div class="ui">
         <span style="margin-right: 10px">组件库：</span>
         <el-radio-group v-model="curUI" class="ml-4">
@@ -16,7 +26,7 @@
       </div>
       <div id="preview">
         <SchemaRender
-          :key="curUI"
+          :key="curUI + refreshKey"
           ref="formRef"
           :schema="schema"
           :widgets-config="config"
@@ -28,19 +38,41 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import MonocoEditor from '@/components/MonacoEditor/index.vue'
-import base from './schema/base.json'
+import test01 from './schema/01.json'
+import test02 from './schema/02.json'
 import { SchemaRender } from '@/lib'
-import epConfig from '@/lib/configs/element-plus'
-import antdvConfig from '@/lib/configs/antdv'
+import epConfig from '@/lib/presets/element-plus'
+import antdvConfig from '@/lib/presets/antdv'
 import Split from 'split.js'
 
 onMounted(() => {
   Split(['#editor', '#preview'], { minSize: 350, gutterSize: 14 })
 })
 
-const jsonStr = ref(JSON.stringify(base, null, 2))
+const jsonStr = ref(JSON.stringify(test01, null, 2))
+
+const curJson = ref('02')
+
+const refreshKey = ref(0)
+
+watch(
+  () => curJson.value,
+  (val) => {
+    switch (val) {
+      case '01':
+        jsonStr.value = JSON.stringify(test01, null, 2)
+        break
+      case '02':
+        jsonStr.value = JSON.stringify(test02, null, 2)
+        break
+    }
+    refreshKey.value++
+  },{
+    immediate:true
+  }
+)
 
 const schema = computed(() => {
   return JSON.parse(jsonStr.value)
@@ -70,6 +102,17 @@ const test = async () => {
     console.log('🚀 ~  error:', error)
   }
 }
+
+const options = [
+  {
+    value: '01',
+    label: '01'
+  },
+  {
+    value: '02',
+    label: '02'
+  }
+]
 </script>
 
 <style lang="scss" scoped>
@@ -90,7 +133,8 @@ const test = async () => {
     width: 50%;
   }
   .title {
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 16px;
   }
 }
 
@@ -122,3 +166,4 @@ const test = async () => {
   cursor: col-resize;
 }
 </style>
+@/lib/presets/element-plus@/lib/presets/antdv

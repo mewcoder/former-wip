@@ -11,7 +11,7 @@ import {
   getComponent,
   getValue,
   setValue,
-  getVModelProp,
+  getMappingProp,
   generateChildren
 } from '../utils'
 import type { ChildrenItem } from '../types'
@@ -34,14 +34,17 @@ export default defineComponent({
   setup(props) {
     const ctx = inject(ContextSymbol, {})
 
-    const { Component: Widget, presetProps } = getComponent(
-      props.schema.widget,
+    const { component: Widget, presetProps } = getComponent(
+      props.schema,
       ctx.config
     )
 
-    const children = generateChildren(props.schema, ctx.config)
-
-    const modelProp = getVModelProp(props.schema, ctx.config)
+    const modelProp = getMappingProp(
+      props.schema['ui-widget'],
+      ctx.config,
+      'model',
+      ctx.config?.defaultModelProp || 'modelValue'
+    )
 
     const modelValue = computed({
       get() {
@@ -52,12 +55,16 @@ export default defineComponent({
       }
     })
 
+    const children = generateChildren(props.schema, ctx.config)
+
+    console.log(children)
+
     return () =>
       h(
         Widget,
         {
           ...presetProps,
-          ...props.schema.props,
+          ...props.schema['ui-props'],
           [modelProp]: modelValue.value,
           [`onUpdate:${modelProp}`]: ($event: any) => {
             modelValue.value = $event
@@ -82,16 +89,19 @@ const WidgetChildren = defineComponent({
 
     return () =>
       props.children.map((item) => {
+        console.log('----', item)
         if (typeof item === 'string') {
           return h(Fragment, null, [item]) // 字符串渲染
         } else if (isChildrenItem(item)) {
-          const { Component: WidgetChild, presetProps } = getComponent(
-            item.widget,
+          console.log('----1', item)
+          const { component: WidgetChild, presetProps } = getComponent(
+            item,
             ctx.config
           )
+          console.log('----2', WidgetChild)
           return h(
             WidgetChild,
-            { ...presetProps, ...item.props },
+            { ...presetProps, ...item['ui-props'] },
             () =>
               item.children && h(WidgetChildren, { children: item.children })
           )
@@ -102,5 +112,5 @@ const WidgetChildren = defineComponent({
 })
 
 function isChildrenItem(item: ChildrenItem | string): item is ChildrenItem {
-  return typeof item === 'object' && item !== null && 'widget' in item
+  return typeof item === 'object' && item !== null
 }

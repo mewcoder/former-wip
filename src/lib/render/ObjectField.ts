@@ -2,8 +2,7 @@ import { defineComponent, inject, h, type PropType } from 'vue'
 import SchemaField from './SchemaField'
 import ObjectBox from '../components/ObjectBase.vue'
 import type { Schema } from '../types'
-
-import { getComponent, getMappingProp } from '../utils'
+import { getComponentByType } from '../utils'
 import { ContextSymbol } from '../shared/context'
 
 export default defineComponent({
@@ -26,7 +25,10 @@ export default defineComponent({
   setup(props) {
     const ctx = inject(ContextSymbol, {})
 
-    const { Component: Row, presetProps } = getComponent('row', ctx.config)
+    const { component: Row, presetProps } = getComponentByType(
+      'row',
+      ctx.config
+    )
 
     const renderFieldList = () => {
       return h(Row, { ...presetProps }, () =>

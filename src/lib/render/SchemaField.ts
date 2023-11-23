@@ -7,12 +7,11 @@ import {
   type PropType
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
-import { getComponent, getMappingProp } from '../utils'
+import { getComponentByType, getMappingProp } from '../utils'
 import BasicField from './BasicField'
 import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
 import type { Schema } from '../types'
-import { ElCol } from 'element-plus'
 
 // 递归渲染
 export default defineComponent({
@@ -75,15 +74,13 @@ export default defineComponent({
 
     // 包裹 FormItem
     if (props.showFormItem) {
-      const { Component: Col, presetProps: colPresetProps } = getComponent(
-        'col',
-        ctx.config
-      )
+      const { component: Col, presetProps: colPresetProps } =
+        getComponentByType('col', ctx.config)
 
       // 嵌套数组和对象 占位
       const spanConfig = isNest.value ? { span: 24 } : {}
 
-      const { Component: FormItem, presetProps } = getComponent(
+      const { component: FormItem, presetProps } = getComponentByType(
         'form-item',
         ctx.config
       )

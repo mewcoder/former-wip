@@ -8,9 +8,9 @@ import {
   type PropType
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
-import { getComponent, getMappingProp } from '../utils'
+import { getComponentByType, getMappingProp } from '../utils'
 import ObjectField from './ObjectField'
-import type { WidgetsConfig, Schema } from '../types'
+import type { PresetConfig, Schema } from '../types'
 
 export default defineComponent({
   name: 'MainForm',
@@ -20,7 +20,7 @@ export default defineComponent({
       required: true
     },
     widgetsConfig: {
-      type: Object as PropType<WidgetsConfig>,
+      type: Object as PropType<PresetConfig>,
       default: () => ({}),
       required: true
     }
@@ -30,7 +30,7 @@ export default defineComponent({
     const formRef = ref(null)
     const formData = reactive({})
 
-    const { Component: Form, presetProps } = getComponent(
+    const { component: Form, presetProps } = getComponentByType(
       'form',
       props.widgetsConfig
     )

@@ -1,6 +1,4 @@
-import type { WidgetsConfig, Option } from '../types'
-
-const config: WidgetsConfig = {
+export default {
   widgets: {
     'form': {
       widget: 'el-form',
@@ -18,7 +16,7 @@ const config: WidgetsConfig = {
     'col': {
       widget: 'el-col',
       props: {
-        span: 16
+        span: 12
       }
     },
     'input': 'el-input',
@@ -31,13 +29,14 @@ const config: WidgetsConfig = {
     'input-number': 'el-input-number',
     'select': {
       widget: 'el-select',
+      props: {
+        placeholder: '请选择'
+      },
       generateChildren: (options) => getSelectChildren(options, 'el-option')
     },
     'multi-select': {
       widget: 'el-select',
-      props: {
-        multiple: true
-      },
+      props: { placeholder: '请选择', multiple: true },
       generateChildren: (options) => getSelectChildren(options, 'el-option')
     },
     'radio-group': {
@@ -53,19 +52,17 @@ const config: WidgetsConfig = {
   }
 }
 
-function getSelectChildren(options: Option[], widget: string) {
+function getSelectChildren(options, widget) {
   return options.map((item) => ({
-    widget,
-    props: { label: item.label, value: item.value }
+    'ui-widget': widget,
+    'ui-props': { label: item.label, value: item.value }
   }))
 }
 
-function getGroupChildren(options: Option[], widget: string) {
+function getGroupChildren(options, widget) {
   return options.map((item) => ({
-    widget,
-    props: { label: item.value },
-    children: [item.label]
+    'ui-widget': widget,
+    'ui-props': { label: item.value },
+    'children': [item.label]
   }))
 }
-
-export default config
