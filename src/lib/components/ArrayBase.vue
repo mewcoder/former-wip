@@ -34,7 +34,7 @@ export default defineComponent({
       type: Array as PropType<any[]>,
       required: true
     },
-    opreates: {
+    operations: {
       type: Object as PropType<any>,
       required: true
     }
@@ -42,11 +42,11 @@ export default defineComponent({
   inheritAttrs: false,
   setup(props, { slots }) {
     function handleRemove(index: number) {
-      props.opreates?.remove(index)
+      props.operations?.remove(index)
     }
 
     function handleAdd() {
-      props.opreates?.add()
+      props.operations?.add()
     }
     return {
       handleAdd,

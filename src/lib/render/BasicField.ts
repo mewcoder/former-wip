@@ -57,8 +57,6 @@ export default defineComponent({
 
     const children = generateChildren(props.schema, ctx.config)
 
-    console.log(children)
-
     return () =>
       h(
         Widget,
@@ -89,21 +87,20 @@ const WidgetChildren = defineComponent({
 
     return () =>
       props.children.map((item) => {
-        console.log('----', item)
         if (typeof item === 'string') {
           return h(Fragment, null, [item]) // 字符串渲染
         } else if (isChildrenItem(item)) {
-          console.log('----1', item)
           const { component: WidgetChild, presetProps } = getComponent(
             item,
             ctx.config
           )
-          console.log('----2', WidgetChild)
+
           return h(
             WidgetChild,
             { ...presetProps, ...item['ui-props'] },
             () =>
-              item.children && h(WidgetChildren, { children: item.children })
+              item.children &&
+              h(WidgetChildren, { children: item['ui-children'] })
           )
         }
         return null

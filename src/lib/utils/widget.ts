@@ -3,16 +3,9 @@ import type {
   Schema,
   PresetConfig,
   WidgetPresetConfig,
-  ChildrenItem
+  WidgetChildren
 } from '../types'
-
-export { get as getValue } from 'lodash-es'
-export { set as setValue } from 'lodash-es'
-
-enum SchemaKey {
-  WidgetType = 'ui-widget',
-  WidgetProps = 'ui-props'
-}
+import { SchemaKeys } from '../shared'
 
 function getWidgetPresetConfig(
   widgetType: string,
@@ -69,7 +62,7 @@ export function getComponent(
   component: ConcreteComponent | string
   presetProps: object
 } {
-  const widgetType = schema[SchemaKey.WidgetType]
+  const widgetType = schema[SchemaKeys.WidgetType]
 
   console.log('widgetType', widgetType)
 
@@ -100,14 +93,14 @@ export function getMappingProp(
 export function generateChildren(
   schema: Schema,
   config: PresetConfig
-): ChildrenItem[] {
-  const widgetType = schema[SchemaKey.WidgetType]
+): WidgetChildren[] {
+  const widgetType = schema[SchemaKeys.WidgetType]
   if (!widgetType) return []
   const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
   if (widgetPresetConfig && widgetPresetConfig?.generateChildren) {
-    console.log(schema[SchemaKey.WidgetProps])
+    console.log(schema[SchemaKeys.WidgetProps])
     return widgetPresetConfig.generateChildren(
-      schema?.[SchemaKey.WidgetProps]?.options || []
+      schema?.[SchemaKeys.WidgetProps]?.options || []
     )
   }
   return []

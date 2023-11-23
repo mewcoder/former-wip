@@ -1,4 +1,5 @@
 import type { RuleItem } from './rule'
+import type { WidgetChildren } from './config'
 
 export type SchemaType =
   | 'string'
@@ -93,6 +94,9 @@ interface SchemaUI {
 
   /** 序号  */
   ['ui-order']?: number
+
+  /** widget 子节点  */
+  ['ui-children']?: WidgetChildren
 
   [key: string]: any
 }

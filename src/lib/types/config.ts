@@ -6,16 +6,16 @@ export interface Option {
 
 type Widget = string | ConcreteComponent
 
-export interface ChildrenItem {
+export interface WidgetChildren {
   'ui-widget': Widget
   'ui-props'?: object
-  children?: (string | ChildrenItem)[]
+  'ui-children'?: (string | WidgetChildren)[]
 }
 
 export interface WidgetPresetConfig {
   widget: Widget
   props?: Record<string, any>
-  generateChildren?: (options: Option[]) => ChildrenItem[]
+  generateChildren?: (options: Option[]) => WidgetChildren[]
   propMapping?: Record<string, string>
 }
 

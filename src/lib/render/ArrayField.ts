@@ -39,7 +39,7 @@ export default defineComponent({
         {
           schema: props.schema,
           list: list.value,
-          opreates: {
+          operations: {
             add,
             remove
           }
