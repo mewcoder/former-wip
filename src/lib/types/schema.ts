@@ -1,5 +1,6 @@
 import type { RuleItem } from './rule'
 import type { WidgetChildren } from './config'
+import { SchemaKeys } from '../shared'
 
 export type SchemaType =
   | 'string'
@@ -72,31 +73,31 @@ interface SchemaValidation {
 // 和 UI 相关的扩展 Schema
 interface SchemaUI {
   /** 组件 */
-  ['ui-widget']?: string
+  [SchemaKeys.WidgetType]?: string
 
   /** 组件透传属性 */
-  ['ui-props']?: Record<string, any>
+  [SchemaKeys.WidgetProps]?: Record<string, any>
 
   /** form-item 透传属性 */
-  ['ui-field-props']?: Record<string, any>
+  [SchemaKeys.FieldProps]?: Record<string, any>
 
   /** 栅格 透传属性 */
-  ['ui-grid-props']?: Record<string, any>
+  [SchemaKeys.GridProps]?: Record<string, any>
 
   /** 是否禁用 */
-  ['ui-disabled']?: boolean | Expression
+  [SchemaKeys.disabled]?: boolean | Expression
 
   /** 是否只读 */
-  ['ui-read-only']?: boolean | Expression
+  [SchemaKeys.readOnly]?: boolean | Expression
 
   /** 是否隐藏，数据不保留  */
-  ['ui-hidden']?: boolean | Expression
+  [SchemaKeys.hidden]?: boolean | Expression
 
   /** 序号  */
-  ['ui-order']?: number
+  [SchemaKeys.order]?: number
 
   /** widget 子节点  */
-  ['ui-children']?: WidgetChildren
+  [SchemaKeys.WidgetChildren]?: WidgetChildren
 
   [key: string]: any
 }

@@ -1,4 +1,5 @@
 import type { ConcreteComponent } from 'vue'
+import { SchemaKeys } from '../shared'
 export interface Option {
   label: string
   value: any
@@ -7,9 +8,9 @@ export interface Option {
 type Widget = string | ConcreteComponent
 
 export interface WidgetChildren {
-  'ui-widget': Widget
-  'ui-props'?: object
-  'ui-children'?: (string | WidgetChildren)[]
+  [SchemaKeys.WidgetType]: string
+  [SchemaKeys.WidgetProps]?: object
+  [SchemaKeys.WidgetChildren]?: (string | WidgetChildren)[]
 }
 
 export interface WidgetPresetConfig {

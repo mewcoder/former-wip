@@ -14,7 +14,8 @@ import {
   getMappingProp,
   generateChildren
 } from '../utils'
-import type { ChildrenItem } from '../types'
+import type { WidgetChildren, WidgetChildren } from '../types'
+import { SchemaKeys } from '../shared'
 
 export default defineComponent({
   name: 'BasicField',
@@ -40,7 +41,7 @@ export default defineComponent({
     )
 
     const modelProp = getMappingProp(
-      props.schema['ui-widget'],
+      props.schema[SchemaKeys.WidgetType],
       ctx.config,
       'model',
       ctx.config?.defaultModelProp || 'modelValue'
@@ -62,7 +63,7 @@ export default defineComponent({
         Widget,
         {
           ...presetProps,
-          ...props.schema['ui-props'],
+          ...props.schema[SchemaKeys.WidgetProps],
           [modelProp]: modelValue.value,
           [`onUpdate:${modelProp}`]: ($event: any) => {
             modelValue.value = $event
@@ -77,7 +78,7 @@ const WidgetChildren = defineComponent({
   name: 'WidgetChildren',
   props: {
     children: {
-      type: Array as PropType<(ChildrenItem | string)[]>,
+      type: Array as PropType<(WidgetChildren | string)[]>,
       required: true
     }
   },
@@ -97,10 +98,10 @@ const WidgetChildren = defineComponent({
 
           return h(
             WidgetChild,
-            { ...presetProps, ...item['ui-props'] },
+            { ...presetProps, ...item[SchemaKeys.WidgetProps] },
             () =>
-              item.children &&
-              h(WidgetChildren, { children: item['ui-children'] })
+              item[SchemaKeys.WidgetChildren] &&
+              h(WidgetChildren, { children: item[SchemaKeys.WidgetChildren] })
           )
         }
         return null
@@ -108,6 +109,6 @@ const WidgetChildren = defineComponent({
   }
 })
 
-function isChildrenItem(item: ChildrenItem | string): item is ChildrenItem {
+function isChildrenItem(item: WidgetChildren | string): item is WidgetChildren {
   return typeof item === 'object' && item !== null
 }

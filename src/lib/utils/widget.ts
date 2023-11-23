@@ -56,15 +56,13 @@ export function getComponentByType(
 }
 
 export function getComponent(
-  schema: Schema,
+  schema: { [SchemaKeys.WidgetType]: string },
   config: PresetConfig
 ): {
   component: ConcreteComponent | string
   presetProps: object
 } {
   const widgetType = schema[SchemaKeys.WidgetType]
-
-  console.log('widgetType', widgetType)
 
   if (!widgetType) {
     console.warn('widget is required')
@@ -98,7 +96,6 @@ export function generateChildren(
   if (!widgetType) return []
   const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
   if (widgetPresetConfig && widgetPresetConfig?.generateChildren) {
-    console.log(schema[SchemaKeys.WidgetProps])
     return widgetPresetConfig.generateChildren(
       schema?.[SchemaKeys.WidgetProps]?.options || []
     )
