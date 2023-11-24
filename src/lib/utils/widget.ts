@@ -88,14 +88,18 @@ export function getMappingProp(
   return defaultProp
 }
 
-export function generateChildren(
+// options 映射成 children
+export function getChildren(
   schema: Schema,
   config: PresetConfig
 ): WidgetChildren[] {
   const widgetType = schema[SchemaKeys.WidgetType]
   if (!widgetType) return []
   const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
-  if (widgetPresetConfig && widgetPresetConfig?.generateChildren) {
+
+  if (schema[SchemaKeys.WidgetChildren]) {
+    return schema[SchemaKeys.WidgetChildren]
+  } else if (widgetPresetConfig && widgetPresetConfig?.generateChildren) {
     return widgetPresetConfig.generateChildren(
       schema?.[SchemaKeys.WidgetProps]?.options || []
     )

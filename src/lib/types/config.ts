@@ -7,16 +7,16 @@ export interface Option {
 
 type Widget = string | ConcreteComponent
 
-export interface WidgetChildren {
+export interface WidgetChildrenItem {
   [SchemaKeys.WidgetType]: string
   [SchemaKeys.WidgetProps]?: object
-  [SchemaKeys.WidgetChildren]?: (string | WidgetChildren)[]
+  [SchemaKeys.WidgetChildren]?: (string | WidgetChildrenItem)[]
 }
 
 export interface WidgetPresetConfig {
   widget: Widget
   props?: Record<string, any>
-  generateChildren?: (options: Option[]) => WidgetChildren[]
+  generateChildren?: (options: Option[]) => WidgetChildrenItem[]
   propMapping?: Record<string, string>
 }
 

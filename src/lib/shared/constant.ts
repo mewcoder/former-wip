@@ -1,6 +1,6 @@
 export enum SchemaKeys {
   WidgetType = 'ui-widget',
-  WidgetProps = 'ui-widget-props',
+  WidgetProps = 'ui-props',
   FormProps = 'ui-form-props',
   GridProps = 'ui-grid-props',
   WidgetChildren = 'ui-children',

@@ -12,9 +12,9 @@ import {
   getValue,
   setValue,
   getMappingProp,
-  generateChildren
+  getChildren
 } from '../utils'
-import type { WidgetChildren, WidgetChildren } from '../types'
+import type { WidgetChildrenItem } from '../types'
 import { SchemaKeys } from '../shared'
 
 export default defineComponent({
@@ -56,7 +56,7 @@ export default defineComponent({
       }
     })
 
-    const children = generateChildren(props.schema, ctx.config)
+    const children = getChildren(props.schema, ctx.config)
 
     return () =>
       h(
@@ -78,7 +78,7 @@ const WidgetChildren = defineComponent({
   name: 'WidgetChildren',
   props: {
     children: {
-      type: Array as PropType<(WidgetChildren | string)[]>,
+      type: Array as PropType<(WidgetChildrenItem | string)[]>,
       required: true
     }
   },
@@ -88,8 +88,9 @@ const WidgetChildren = defineComponent({
 
     return () =>
       props.children.map((item) => {
+        // 字符串直接渲染
         if (typeof item === 'string') {
-          return h(Fragment, null, [item]) // 字符串渲染
+          return h(Fragment, null, [item])
         } else if (isChildrenItem(item)) {
           const { component: WidgetChild, presetProps } = getComponent(
             item,
@@ -109,6 +110,8 @@ const WidgetChildren = defineComponent({
   }
 })
 
-function isChildrenItem(item: WidgetChildren | string): item is WidgetChildren {
+function isChildrenItem(
+  item: WidgetChildrenItem | string
+): item is WidgetChildrenItem {
   return typeof item === 'object' && item !== null
 }

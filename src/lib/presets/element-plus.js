@@ -52,6 +52,7 @@ export default {
   }
 }
 
+// todo
 function getSelectChildren(options, widget) {
   return options.map((item) => ({
     'ui-widget': widget,
@@ -63,6 +64,6 @@ function getGroupChildren(options, widget) {
   return options.map((item) => ({
     'ui-widget': widget,
     'ui-props': { label: item.value },
-    'children': [item.label]
+    'ui-children': [item.label]
   }))
 }
