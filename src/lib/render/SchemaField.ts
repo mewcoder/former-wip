@@ -68,8 +68,9 @@ export default defineComponent({
     })
 
     const prop = computed(() => {
-      if (isObjectField(props.schema) || isArrayField(props.schema))
-        return undefined
+      // 是否需要校验
+      // if (isObjectField(props.schema) || isArrayField(props.schema))
+      //   return undefined
       return getProp(props.basePath, props.prop)
     })
 
@@ -85,18 +86,16 @@ export default defineComponent({
 
     const deps = props.schema.dependencies
 
-    console.log(deps)
-
     if (deps) {
       watch(
         deps.map((path) => () => ctx.formData[path]),
         () => {
-          console.log('watch deps', deps)
+          console.log('watch deps change', deps)
           let hid = false
           const val = props.schema[SchemaKeys.Hidden]
           if (val) {
             if (isExpression(val)) {
-              hid = parseExpression(val, ctx.formData,deps)
+              hid = parseExpression(val, ctx.formData, deps)
             } else {
               hid = true
             }
@@ -138,6 +137,9 @@ export default defineComponent({
           )
 
           const rules = getRules(props.schema)
+
+
+          console.log(rules)
 
           return h(Col, { ...colPresetProps, ...spanConfig }, () =>
             h(
