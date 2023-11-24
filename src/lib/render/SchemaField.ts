@@ -1,4 +1,6 @@
 import {
+  ref,
+  watch,
   computed,
   defineComponent,
   h,
@@ -7,11 +9,18 @@ import {
   type PropType
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
-import { getComponentByType, getMappingProp, getRules } from '../utils'
+import {
+  getComponentByType,
+  getMappingProp,
+  getRules,
+  parseExpression,
+  isExpression
+} from '../utils'
 import BasicField from './BasicField'
 import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
 import type { Schema } from '../types'
+import { SchemaKeys } from '../shared'
 
 // 递归渲染
 export default defineComponent({
@@ -72,46 +81,81 @@ export default defineComponent({
         showWrapper: props.showWrapper
       })
 
-    // 包裹 FormItem
-    if (props.showFormItem) {
-      const { component: Col, presetProps: colPresetProps } =
-        getComponentByType('col', ctx.config)
+    const hidden = ref(false)
 
-      // 嵌套数组和对象 占位
-      const spanConfig = isNest.value ? { span: 24 } : {}
+    const deps = props.schema.dependencies
 
-      const { component: FormItem, presetProps } = getComponentByType(
-        'form-item',
-        ctx.config
+    console.log(deps)
+
+    if (deps) {
+      watch(
+        deps.map((path) => () => ctx.formData[path]),
+        () => {
+          console.log('watch deps', deps)
+          let hid = false
+          const val = props.schema[SchemaKeys.Hidden]
+          if (val) {
+            if (isExpression(val)) {
+              hid = parseExpression(val, ctx.formData)
+            } else {
+              hid = true
+            }
+          } else {
+            hid = false
+          }
+          hidden.value = hid
+        }
       )
+    }
+    return () => {
+      if (hidden.value) return null
+      else {
+        // 包裹 FormItem
+        if (props.showFormItem) {
+          const { component: Col, presetProps: colPresetProps } =
+            getComponentByType('col', ctx.config)
 
-      const propKey = getMappingProp(ctx.config, 'form-item', 'prop', 'prop')
+          // 嵌套数组和对象 占位
+          const spanConfig = isNest.value ? { span: 24 } : {}
 
-      const propType = getMappingProp(
-        ctx.config,
-        'form-item',
-        'propType',
-        'string'
-      )
-
-      const rules = getRules(props.schema)
-
-      return () =>
-        h(Col, { ...colPresetProps, ...spanConfig }, () =>
-          h(
-            FormItem,
-            {
-              ...presetProps,
-              label: props.schema.title,
-              rules,
-              [propKey]: getPropPath(prop.value, propType)
-            },
-            () => renderField()
+          const { component: FormItem, presetProps } = getComponentByType(
+            'form-item',
+            ctx.config
           )
-        )
-    } else {
-      // 直接渲染
-      return () => renderField()
+
+          const propKey = getMappingProp(
+            ctx.config,
+            'form-item',
+            'prop',
+            'prop'
+          )
+
+          const propType = getMappingProp(
+            ctx.config,
+            'form-item',
+            'propType',
+            'string'
+          )
+
+          const rules = getRules(props.schema)
+
+          return h(Col, { ...colPresetProps, ...spanConfig }, () =>
+            h(
+              FormItem,
+              {
+                ...presetProps,
+                label: props.schema.title,
+                rules,
+                [propKey]: getPropPath(prop.value, propType)
+              },
+              () => renderField()
+            )
+          )
+        } else {
+          // 直接渲染
+          return renderField()
+        }
+      }
     }
   }
 })

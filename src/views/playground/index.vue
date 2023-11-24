@@ -13,11 +13,14 @@
         </el-select>
       </div>
       <div class="ui">
-        <span style="margin-right: 10px">组件库：</span>
-        <el-radio-group v-model="curUI" class="ml-4">
-          <el-radio label="ep">Element Plus</el-radio>
-          <el-radio label="antdv">Ant Design Vue</el-radio>
-        </el-radio-group>
+        <div>
+          <span style="margin-right: 10px">组件库：</span>
+          <el-radio-group v-model="curUI" class="ml-4">
+            <el-radio label="ep">Element Plus</el-radio>
+            <el-radio label="antdv">Ant Design Vue</el-radio>
+          </el-radio-group>
+        </div>
+        <el-button @click="forceUpdate">ForceUpdate</el-button>
       </div>
     </header>
     <main class="container">
@@ -81,7 +84,7 @@ const schema = computed(() => {
 
 const formRef = ref()
 
-const curUI = ref('antdv')
+const curUI = ref('ep')
 
 const config = computed(() => {
   switch (curUI.value) {
@@ -105,6 +108,10 @@ const test = async () => {
   } catch (error) {
     console.log('🚀 ~  error:', error)
   }
+}
+
+const forceUpdate = () => {
+  refreshKey.value++
 }
 
 const options = [
@@ -135,6 +142,9 @@ const options = [
 
   .ui {
     width: 50%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
   .title {
     font-weight: 600;
