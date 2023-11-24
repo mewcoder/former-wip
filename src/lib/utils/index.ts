@@ -12,22 +12,30 @@ export function isExpression(expression: any) {
   return expression.match(pattern) && !expression.match(reg1)
 }
 
-export function parseExpression(expression: any, formData) {
+export function parseExpression(expression: any, formData, dependencies) {
+  const $deps = dependencies || []
+
+  const scope = {
+    $deps
+  }
+
   if (typeof expression === 'string') {
     const funcBody = expression
       .replace(/^{\s*{/g, '')
       .replace(/}\s*}$/g, '')
       .trim()
     const funcStr = `
-      return ${funcBody.replace(/formData/g, JSON.stringify(formData))}
+      return ${funcBody.replace(
+        /(\$deps\[\d+\])/g,
+        JSON.stringify(formData) + '[$1]'
+      )}
     `
-    console.log(funcStr)
     try {
-      const result = Function(funcStr)()
+      const result = new Function('$root', `with($root) { ${funcStr} }`)(scope)
       return result
     } catch (error) {
-      //console.log(error, funcStr, parentPath);
-      return null // 如果计算有错误，return null 最合适
+      console.log(error, expression)
+      return null
     }
   }
   return expression

@@ -96,7 +96,7 @@ export default defineComponent({
           const val = props.schema[SchemaKeys.Hidden]
           if (val) {
             if (isExpression(val)) {
-              hid = parseExpression(val, ctx.formData)
+              hid = parseExpression(val, ctx.formData,deps)
             } else {
               hid = true
             }
