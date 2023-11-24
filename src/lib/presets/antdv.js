@@ -12,7 +12,8 @@ export default {
     'form-item': {
       widget: 'a-form-item',
       propMapping: {
-        prop: 'name'
+        prop: 'name',
+        propType: 'array'
       }
     },
     'row': {

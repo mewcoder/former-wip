@@ -53,7 +53,7 @@ onMounted(() => {
 
 const jsonStr = ref(JSON.stringify(test01, null, 2))
 
-const curJson = ref('02')
+const curJson = ref('01')
 
 const refreshKey = ref(0)
 
@@ -69,8 +69,9 @@ watch(
         break
     }
     refreshKey.value++
-  },{
-    immediate:true
+  },
+  {
+    immediate: true
   }
 )
 
@@ -80,7 +81,7 @@ const schema = computed(() => {
 
 const formRef = ref()
 
-const curUI = ref('ep')
+const curUI = ref('antdv')
 
 const config = computed(() => {
   switch (curUI.value) {
@@ -96,8 +97,11 @@ const config = computed(() => {
 const test = async () => {
   try {
     const data = formRef.value.getFormData()
-    alert(JSON.stringify(data, null, 2))
     console.log('🚀 ~ formRef:', data)
+    const valid = await formRef.value.getFormInstance()?.validate()
+    if (valid) {
+      alert(JSON.stringify(data, null, 2))
+    }
   } catch (error) {
     console.log('🚀 ~  error:', error)
   }

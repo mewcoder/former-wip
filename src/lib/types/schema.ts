@@ -1,17 +1,15 @@
 import type { RuleItem } from './rule'
-import type { WidgetChildren } from './config'
+import type { WidgetChildrenItem } from './config'
 import { SchemaKeys } from '../shared'
 
 export type SchemaType =
   | 'string'
-  | 'object'
-  | 'array'
   | 'number'
   | 'boolean'
+  | 'object'
+  | 'array'
   | 'void'
   | 'date'
-  | 'datetime'
-  | (string & {})
 
 export type FormatType =
   | 'url'
@@ -97,7 +95,7 @@ interface SchemaUI {
   [SchemaKeys.Order]?: number
 
   /** widget 子节点  */
-  [SchemaKeys.WidgetChildren]?: WidgetChildren
+  [SchemaKeys.WidgetChildren]?: WidgetChildrenItem[]
 
   [key: string]: any
 }

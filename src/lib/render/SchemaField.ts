@@ -7,7 +7,7 @@ import {
   type PropType
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
-import { getComponentByType, getMappingProp } from '../utils'
+import { getComponentByType, getMappingProp, getRules } from '../utils'
 import BasicField from './BasicField'
 import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
@@ -87,6 +87,15 @@ export default defineComponent({
 
       const propKey = getMappingProp(ctx.config, 'form-item', 'prop', 'prop')
 
+      const propType = getMappingProp(
+        ctx.config,
+        'form-item',
+        'propType',
+        'string'
+      )
+
+      const rules = getRules(props.schema)
+
       return () =>
         h(Col, { ...colPresetProps, ...spanConfig }, () =>
           h(
@@ -94,7 +103,8 @@ export default defineComponent({
             {
               ...presetProps,
               label: props.schema.title,
-              [propKey]: prop.value
+              rules,
+              [propKey]: getPropPath(prop.value, propType)
             },
             () => renderField()
           )
@@ -120,4 +130,10 @@ function isArrayField(schema: Schema) {
 
 function getProp(basePath: string[], prop: string) {
   return prop && basePath.length > 0 ? basePath.join('.') + '.' + prop : prop
+}
+
+function getPropPath(prop: string | undefined, propType: string) {
+  if (!prop) return
+  if (propType === 'array') return prop.split('.')
+  return prop
 }

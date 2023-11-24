@@ -41,8 +41,8 @@ export default defineComponent({
     )
 
     const modelProp = getMappingProp(
-      props.schema[SchemaKeys.WidgetType],
       ctx.config,
+      props.schema[SchemaKeys.WidgetType],
       'model',
       ctx.config?.defaultModelProp || 'modelValue'
     )
