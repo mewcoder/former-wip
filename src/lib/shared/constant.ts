@@ -1,11 +1,11 @@
 export enum SchemaKeys {
   WidgetType = 'ui-widget',
-  WidgetProps = 'ui-props',
-  WidgetChildren = 'ui-children',
-  FieldProps = 'ui-field-props',
+  WidgetProps = 'ui-widget-props',
+  FormProps = 'ui-form-props',
   GridProps = 'ui-grid-props',
-  disabled = 'ui-disabled',
-  readOnly = 'ui-read-only',
-  hidden = 'ui-hidden',
-  order = 'ui-order'
+  WidgetChildren = 'ui-children',
+  Disabled = 'ui-disabled',
+  ReadOnly = 'ui-read-only',
+  Hidden = 'ui-hidden',
+  Order = 'ui-order'
 }

@@ -78,23 +78,23 @@ interface SchemaUI {
   /** 组件透传属性 */
   [SchemaKeys.WidgetProps]?: Record<string, any>
 
-  /** form-item 透传属性 */
-  [SchemaKeys.FieldProps]?: Record<string, any>
+  /** form/form-item 透传属性 */
+  [SchemaKeys.FormProps]?: Record<string, any>
 
-  /** 栅格 透传属性 */
+  /** row/col 透传属性 */
   [SchemaKeys.GridProps]?: Record<string, any>
 
   /** 是否禁用 */
-  [SchemaKeys.disabled]?: boolean | Expression
+  [SchemaKeys.Disabled]?: boolean | Expression
 
   /** 是否只读 */
-  [SchemaKeys.readOnly]?: boolean | Expression
+  [SchemaKeys.ReadOnly]?: boolean | Expression
 
   /** 是否隐藏，数据不保留  */
-  [SchemaKeys.hidden]?: boolean | Expression
+  [SchemaKeys.Hidden]?: boolean | Expression
 
   /** 序号  */
-  [SchemaKeys.order]?: number
+  [SchemaKeys.Order]?: number
 
   /** widget 子节点  */
   [SchemaKeys.WidgetChildren]?: WidgetChildren
