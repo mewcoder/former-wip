@@ -32,7 +32,7 @@ export default defineComponent({
     },
     prop: {
       type: String,
-      required: true
+      default: '' // 根对象时为空
     },
     basePath: {
       type: Array as PropType<string[]>,
@@ -68,16 +68,13 @@ export default defineComponent({
     })
 
     const prop = computed(() => {
-      // 是否需要校验
-      // if (isObjectField(props.schema) || isArrayField(props.schema))
-      //   return undefined
       return getProp(props.basePath, props.prop)
     })
 
     const renderField = () =>
       h(Field, {
         schema: props.schema,
-        basePath: [...props.basePath, props.prop],
+        basePath: props.prop ? [...props.basePath, props.prop] : [...props.basePath],
         prop: prop.value,
         showWrapper: props.showWrapper
       })
@@ -109,8 +106,8 @@ export default defineComponent({
     return () => {
       if (hidden.value) return null
       else {
-        // 包裹 FormItem
-        if (props.showFormItem) {
+        // 包裹 FormItem // 对象和数组可能不需要包裹
+        if (props.showFormItem && props.prop) {
           const { component: Col, presetProps: colPresetProps } =
             getComponentByType(ctx.config, 'col')
 
@@ -139,17 +136,24 @@ export default defineComponent({
 
           const rules = getRules(props.schema)
 
-          return h(Col, { ...colPresetProps, ...spanConfig }, () =>
-            h(
-              FormItem,
-              {
-                ...presetProps,
-                label: props.schema.title,
-                rules,
-                [propKey]: getPropPath(prop.value, propType)
-              },
-              () => renderField()
-            )
+          return h(
+            Col,
+            {
+              ...colPresetProps,
+              ...spanConfig,
+              ...props.schema[SchemaKeys.GridProps]
+            },
+            () =>
+              h(
+                FormItem,
+                {
+                  ...presetProps,
+                  label: props.schema.title,
+                  rules,
+                  [propKey]: getPropPath(prop.value, propType)
+                },
+                () => renderField()
+              )
           )
         } else {
           // 直接渲染
@@ -172,12 +176,13 @@ function isArrayField(schema: Schema) {
   return schema.type === 'array' && schema?.items
 }
 
+// 获取全路径 a.b.c
 function getProp(basePath: string[], prop: string) {
-  return prop && basePath.length > 0 ? basePath.join('.') + '.' + prop : prop
+  return prop && basePath.length > 0 ? `${basePath.join('.')}.${prop}` : prop
 }
 
-function getPropPath(prop: string | undefined, propType: string) {
-  if (!prop) return
-  if (propType === 'array') return prop.split('.')
+// 获取form-item 传入的路径 某些组件库要求是数组
+function getPropPath(prop: string, propType: string) {
+  if (propType === 'array') return prop ? prop.split('.') : []
   return prop
 }

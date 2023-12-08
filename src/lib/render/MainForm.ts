@@ -45,13 +45,13 @@ export default defineComponent({
       config: props.widgetsConfig
     })
 
-    // 获取表单组件 如: el-form
+    // 获取表单组件, 如: el-form
     const { component: Form, presetProps } = getComponentByType(
       props.widgetsConfig,
       'form'
     )
 
-    // 表单数据绑定的key,如: model
+    // 表单数据绑定的key, 如: model
     const modelProp = getMappingProp(
       props.widgetsConfig,
       'form',
@@ -74,12 +74,9 @@ export default defineComponent({
           )
         },
         () => [
-          getOrderProperties(props.schema).map(({ key, schema }) =>
-            h(SchemaField, {
-              prop: key,
-              schema
-            })
-          ),
+          h(SchemaField, {
+            schema: props.schema
+          }),
           // 默认插槽
           slots.default && slots.default()
         ]

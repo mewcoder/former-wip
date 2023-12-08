@@ -51,7 +51,7 @@ export default defineComponent({
               basePath: props.basePath,
               prop: prop + '',
               showWrapper: false,
-              showFormItem: isBasic
+              showFormItem: isBasic // 基本类型的输入框 数组不需要col
             })
         }
       )

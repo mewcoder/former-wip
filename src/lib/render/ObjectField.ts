@@ -42,7 +42,7 @@ export default defineComponent({
       )
     }
 
-    if (!props.showWrapper) {
+    if (!props.showWrapper || props.basePath.length === 0) {
       return () => renderFieldList()
     }
     return () => h(ObjectBox, { schema: props.schema }, () => renderFieldList())
