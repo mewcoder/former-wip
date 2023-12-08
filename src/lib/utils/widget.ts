@@ -3,7 +3,7 @@ import type {
   Schema,
   PresetConfig,
   WidgetPresetConfig,
-  WidgetChildren
+  WidgetChildrenItem
 } from '../types'
 import { SchemaKeys } from '../shared'
 
@@ -31,8 +31,8 @@ export function isWidgetPresetConfig(widgetPresetConfig: WidgetPresetConfig) {
 }
 
 export function getComponentByType(
-  widgetType: string,
-  config: PresetConfig
+  config: PresetConfig,
+  widgetType: string
 ): {
   component: ConcreteComponent | string
   presetProps: object
@@ -71,7 +71,7 @@ export function getComponent(
       presetProps: {}
     }
   }
-  return getComponentByType(widgetType, config)
+  return getComponentByType(config, widgetType)
 }
 
 // 获取 prop 映射
@@ -92,7 +92,7 @@ export function getMappingProp(
 export function getChildren(
   schema: Schema,
   config: PresetConfig
-): WidgetChildren[] {
+): WidgetChildrenItem[] {
   const widgetType = schema[SchemaKeys.WidgetType]
   if (!widgetType) return []
   const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)

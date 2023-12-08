@@ -6,10 +6,16 @@
 - 11.15-11.18 完成基础组件的渲染
 - 11.19-11.21 完成嵌套数据的渲染
 - 11.22-11.23 布局和定义Schema
-- 11.24- 校验
-- 
+- 11.24-11.27 校验和简单联动
+- 11.27-12.1 项目工程化
+-
 
 ## 问题记录
 
-antd-vue 嵌套对象时可能报错 `please transfer a valid name path to form item!` 但不影响
-formData 中比如`a.b`的 path,这时候要求 a 对象必须存在
+- antd-vue 嵌套对象时可能报错 `please transfer a valid name path to form item!` 但不影响
+  formData 中比如`a.b`的 path,这时候要求 a 对象必须存在
+
+- 嵌套对象和数组所占的栅格问题
+  - 嵌套数组对象和对象占一行
+  - 嵌套数组字符串按原来设定吧
+- 嵌套对象和数组是否嵌入form-item问题 -默认嵌入，label 显示有是否显示 title 决定

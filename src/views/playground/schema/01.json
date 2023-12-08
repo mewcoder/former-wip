@@ -12,7 +12,8 @@
     "numberKey": {
       "title": "数字输入框",
       "type": "number",
-      "ui-widget": "input-number"
+      "ui-widget": "input-number",
+      "ui-order": 1
     },
     "objectKey": {
       "title": "嵌套对象",

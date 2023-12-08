@@ -8,8 +8,12 @@ import {
   type PropType
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
-import { getComponentByType, getMappingProp } from '../utils'
-import ObjectField from './ObjectField'
+import {
+  getOrderProperties,
+  getComponentByType,
+  getMappingProp
+} from '../utils'
+import SchemaField from './SchemaField'
 import type { PresetConfig, Schema } from '../types'
 
 export default defineComponent({
@@ -30,11 +34,6 @@ export default defineComponent({
     const formRef = ref(null)
     const formData = reactive({})
 
-    const { component: Form, presetProps } = getComponentByType(
-      'form',
-      props.widgetsConfig
-    )
-
     expose({
       getFormInstance: () => formRef.value,
       getFormData: () => formData
@@ -46,6 +45,13 @@ export default defineComponent({
       config: props.widgetsConfig
     })
 
+    // 获取表单组件 如: el-form
+    const { component: Form, presetProps } = getComponentByType(
+      props.widgetsConfig,
+      'form'
+    )
+
+    // 表单数据绑定的key,如: model
     const modelProp = getMappingProp(
       props.widgetsConfig,
       'form',
@@ -68,10 +74,13 @@ export default defineComponent({
           )
         },
         () => [
-          h(ObjectField, {
-            schema: props.schema,
-            showWrapper: false
-          }),
+          getOrderProperties(props.schema).map(({ key, schema }) =>
+            h(SchemaField, {
+              prop: key,
+              schema
+            })
+          ),
+          // 默认插槽
           slots.default && slots.default()
         ]
       )

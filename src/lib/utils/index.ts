@@ -1,3 +1,5 @@
+import type { Schema } from '../types'
+import { SchemaKeys } from '../shared'
 export { get as getValue } from 'lodash-es'
 export { set as setValue } from 'lodash-es'
 
@@ -39,4 +41,21 @@ export function parseExpression(expression: any, formData, dependencies) {
     }
   }
   return expression
+}
+
+export function getOrderProperties(schema: Schema) {
+  if (!schema.properties) return []
+  const orderProperties: { schema: Schema; key: string }[] = []
+  const unOrderProperties: { schema: Schema; key: string }[] = []
+
+  for (const key in schema.properties) {
+    const item = schema.properties[key]
+    const index = item[SchemaKeys.Order]
+    if (!isNaN(index)) {
+      orderProperties[index] = { schema: item, key }
+    } else {
+      unOrderProperties.push({ schema: item, key })
+    }
+  }
+  return orderProperties.filter((item) => !!item).concat(unOrderProperties)
 }

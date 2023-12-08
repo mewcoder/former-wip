@@ -112,14 +112,14 @@ export default defineComponent({
         // 包裹 FormItem
         if (props.showFormItem) {
           const { component: Col, presetProps: colPresetProps } =
-            getComponentByType('col', ctx.config)
+            getComponentByType(ctx.config, 'col')
 
           // 嵌套数组和对象 占位
           const spanConfig = isNest.value ? { span: 24 } : {}
 
           const { component: FormItem, presetProps } = getComponentByType(
-            'form-item',
-            ctx.config
+            ctx.config,
+            'form-item'
           )
 
           const propKey = getMappingProp(
@@ -129,6 +129,7 @@ export default defineComponent({
             'prop'
           )
 
+          // prop 路径的数据类型  数组或字符串
           const propType = getMappingProp(
             ctx.config,
             'form-item',
@@ -137,9 +138,6 @@ export default defineComponent({
           )
 
           const rules = getRules(props.schema)
-
-
-          console.log(rules)
 
           return h(Col, { ...colPresetProps, ...spanConfig }, () =>
             h(

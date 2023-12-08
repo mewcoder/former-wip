@@ -2,7 +2,7 @@ import { defineComponent, inject, h, type PropType } from 'vue'
 import SchemaField from './SchemaField'
 import ObjectBox from '../components/ObjectBase.vue'
 import type { Schema } from '../types'
-import { getComponentByType } from '../utils'
+import { getComponentByType, getOrderProperties } from '../utils'
 import { ContextSymbol } from '../shared/context'
 
 export default defineComponent({
@@ -18,7 +18,7 @@ export default defineComponent({
     },
     showWrapper: {
       type: Boolean,
-      default: true
+      default: true // 根对象不需要
     }
   },
   inheritAttrs: false,
@@ -26,16 +26,16 @@ export default defineComponent({
     const ctx = inject(ContextSymbol, {})
 
     const { component: Row, presetProps } = getComponentByType(
-      'row',
-      ctx.config
+      ctx.config,
+      'row'
     )
 
     const renderFieldList = () => {
       return h(Row, { ...presetProps }, () =>
-        Object.entries(props.schema?.properties || {}).map(([key, field]) =>
+        getOrderProperties(props.schema).map(({ key, schema }) =>
           h(SchemaField, {
             prop: key,
-            schema: field,
+            schema: schema,
             basePath: props.basePath
           })
         )
