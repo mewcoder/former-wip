@@ -1,8 +1,8 @@
 import { SchemaKeys } from '../shared'
-import type { Schema, PresetConfig, RuleItem } from '../types'
+import type { Schema, RuleItem } from '../types'
 
 function addRequiredRule(schema: Schema, rules: RuleItem[]) {
-  const { required, type, title } = schema
+  const { required, type } = schema
   const hasRequired = rules.some((item) => item?.required)
   // 未声明 required，或 rules 中存在 required 规则
   if (!required || hasRequired) {
@@ -14,7 +14,7 @@ function addRequiredRule(schema: Schema, rules: RuleItem[]) {
     type,
     required: true,
     whitespace: true,
-    message: title + '必填'
+    message: '该项为必填项'
   }
 
   rules.push(rule)
@@ -32,7 +32,7 @@ function addLengthRule(schema: Schema, rules: RuleItem[]) {
   }
 }
 
-export function getRules(schema: Schema, config?: PresetConfig) {
+export function getRules(schema: Schema) {
   const { title, pattern, format } = schema
 
   const rules = schema?.[SchemaKeys.FormProps]?.rules || []

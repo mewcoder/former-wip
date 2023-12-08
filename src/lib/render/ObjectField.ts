@@ -16,9 +16,18 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       default: () => []
     },
-    showWrapper: {
+    /**
+     * 是否显示对象容器，两种情况不需要：
+     * 1.根对象
+     * 2.数组对象
+     */
+    showObjectWrapper: {
       type: Boolean,
-      default: true // 根对象不需要
+      default: true
+    },
+    showTitle: {
+      type: Boolean,
+      default: true
     }
   },
   inheritAttrs: false,
@@ -30,21 +39,24 @@ export default defineComponent({
       'row'
     )
 
-    const renderFieldList = () => {
-      return h(Row, { ...presetProps }, () =>
-        getOrderProperties(props.schema).map(({ key, schema }) =>
-          h(SchemaField, {
-            prop: key,
-            schema: schema,
-            basePath: props.basePath
-          })
+    return () => {
+      const renderFieldList = () => {
+        return h(Row, { ...presetProps }, () =>
+          getOrderProperties(props.schema).map(({ key, schema }) =>
+            h(SchemaField, {
+              prop: key,
+              schema: schema,
+              basePath: props.basePath,
+              showTitle: props.showTitle
+            })
+          )
         )
-      )
-    }
+      }
 
-    if (!props.showWrapper || props.basePath.length === 0) {
-      return () => renderFieldList()
+      if (!props.showObjectWrapper) {
+        return renderFieldList()
+      }
+      return h(ObjectBox, { schema: props.schema }, () => renderFieldList())
     }
-    return () => h(ObjectBox, { schema: props.schema }, () => renderFieldList())
   }
 })

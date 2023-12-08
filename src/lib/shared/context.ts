@@ -3,6 +3,6 @@ import type { InjectionKey } from 'vue'
 
 export const ContextSymbol: InjectionKey<{
   schema: Schema
-  formData: any
+  formData: Record<string, any>
   config: PresetConfig
 }> = Symbol('former')

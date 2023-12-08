@@ -32,7 +32,7 @@ export default defineComponent({
     },
     prop: {
       type: String,
-      default: '' // 根对象时为空
+      default: ''
     },
     basePath: {
       type: Array as PropType<string[]>,
@@ -42,8 +42,11 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    // 是否显示容器 嵌套时会用到
-    showWrapper: {
+    showObjectWrapper: {
+      type: Boolean,
+      default: true
+    },
+    showTitle: {
       type: Boolean,
       default: true
     }
@@ -71,14 +74,6 @@ export default defineComponent({
       return getProp(props.basePath, props.prop)
     })
 
-    const renderField = () =>
-      h(Field, {
-        schema: props.schema,
-        basePath: props.prop ? [...props.basePath, props.prop] : [...props.basePath],
-        prop: prop.value,
-        showWrapper: props.showWrapper
-      })
-
     const hidden = ref(false)
 
     const deps = props.schema.dependencies
@@ -104,61 +99,69 @@ export default defineComponent({
       )
     }
     return () => {
+      const renderField = () =>
+        h(Field, {
+          schema: props.schema,
+          basePath: props.prop
+            ? [...props.basePath, props.prop]
+            : [...props.basePath],
+          prop: prop.value,
+          showObjectWrapper: props.showObjectWrapper,
+          showTitle: props.showTitle
+        })
       if (hidden.value) return null
-      else {
-        // 包裹 FormItem // 对象和数组可能不需要包裹
-        if (props.showFormItem && props.prop) {
-          const { component: Col, presetProps: colPresetProps } =
-            getComponentByType(ctx.config, 'col')
 
-          // 嵌套数组和对象 占位
-          const spanConfig = isNest.value ? { span: 24 } : {}
+      /**
+       * 是否包裹FormItem，两种情况不需要：
+       * 1.根对象
+       * 2.数组对象
+       */
+      if (props.showFormItem) {
+        const { component: Col, presetProps: colPresetProps } =
+          getComponentByType(ctx.config, 'col')
 
-          const { component: FormItem, presetProps } = getComponentByType(
-            ctx.config,
-            'form-item'
-          )
+        // 嵌套数组和对象 占位
+        const spanConfig = isNest.value ? { span: 24 } : {}
 
-          const propKey = getMappingProp(
-            ctx.config,
-            'form-item',
-            'prop',
-            'prop'
-          )
+        const { component: FormItem, presetProps } = getComponentByType(
+          ctx.config,
+          'form-item'
+        )
 
-          // prop 路径的数据类型  数组或字符串
-          const propType = getMappingProp(
-            ctx.config,
-            'form-item',
-            'propType',
-            'string'
-          )
+        const propKey = getMappingProp(ctx.config, 'form-item', 'prop', 'prop')
 
-          const rules = getRules(props.schema)
+        // prop 路径的数据类型  数组或字符串
+        const propType = getMappingProp(
+          ctx.config,
+          'form-item',
+          'propType',
+          'string'
+        )
 
-          return h(
-            Col,
-            {
-              ...colPresetProps,
-              ...spanConfig,
-              ...props.schema[SchemaKeys.GridProps]
-            },
-            () =>
-              h(
-                FormItem,
-                {
-                  ...presetProps,
-                  label: props.schema.title,
-                  rules,
-                  [propKey]: getPropPath(prop.value, propType)
-                },
-                () => renderField()
-              )
-          )
-        } else {
-          // 直接渲染
-          return renderField()
-        }
+        const rules = getRules(props.schema)
+
+        return h(
+          Col,
+          {
+            ...colPresetProps,
+            ...spanConfig,
+            ...props.schema[SchemaKeys.GridProps]
+          },
+          () =>
+            h(
+              FormItem,
+              {
+                ...presetProps,
+                label: props.showTitle ? props.schema.title : undefined,
+                rules,
+                [propKey]: getPropPath(prop.value, propType)
+              },
+              () => renderField()
+            )
+        )
+      } else {
+        // 直接渲染
+        return renderField()
       }
     }
   }

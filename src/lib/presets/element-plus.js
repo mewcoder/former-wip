@@ -16,7 +16,7 @@ export default {
     'col': {
       widget: 'el-col',
       props: {
-        span: 12
+        span: 24
       }
     },
     'input': 'el-input',

@@ -45,13 +45,13 @@ export default defineComponent({
           }
         },
         {
-          field: ({ prop }) =>
+          field: (fieldProps) =>
             h(SchemaField, {
               schema: props.schema.items || {},
               basePath: props.basePath,
-              prop: prop + '',
-              showWrapper: false,
-              showFormItem: isBasic // 基本类型的输入框 数组不需要col
+              showObjectWrapper: false,
+              showFormItem: isBasic,
+              ...fieldProps
             })
         }
       )

@@ -75,7 +75,9 @@ export default defineComponent({
         },
         () => [
           h(SchemaField, {
-            schema: props.schema
+            schema: props.schema,
+            showObjectWrapper: false,
+            showFormItem:false,
           }),
           // 默认插槽
           slots.default && slots.default()
