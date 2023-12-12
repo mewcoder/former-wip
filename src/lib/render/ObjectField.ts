@@ -1,9 +1,9 @@
-import { defineComponent, inject, h, type PropType } from 'vue'
+import { defineComponent, h, type PropType } from 'vue'
 import SchemaField from './SchemaField'
 import ObjectBox from '../components/ObjectBase.vue'
 import type { Schema } from '../types'
-import { getComponentByType, getOrderProperties } from '../utils'
-import { ContextSymbol } from '../shared/context'
+import { getOrderProperties } from '../utils'
+import GridWrapper from './wrapper/Grid'
 
 export default defineComponent({
   name: 'ObjectField',
@@ -24,39 +24,26 @@ export default defineComponent({
     showObjectWrapper: {
       type: Boolean,
       default: true
-    },
-    showTitle: {
-      type: Boolean,
-      default: true
     }
   },
   inheritAttrs: false,
   setup(props) {
-    const ctx = inject(ContextSymbol, {})
-
-    const { component: Row, presetProps } = getComponentByType(
-      ctx.config,
-      'row'
-    )
-
     return () => {
-      const renderFieldList = () => {
-        return h(Row, { ...presetProps }, () =>
+      const renderFields = () => {
+        return h(GridWrapper, { schema: props.schema, type: 'row' }, () =>
           getOrderProperties(props.schema).map(({ key, schema }) =>
             h(SchemaField, {
-              prop: key,
               schema: schema,
               basePath: props.basePath,
-              showTitle: props.showTitle
+              prop: key
             })
           )
         )
       }
 
-      if (!props.showObjectWrapper) {
-        return renderFieldList()
-      }
-      return h(ObjectBox, { schema: props.schema }, () => renderFieldList())
+      return props.showObjectWrapper
+        ? h(ObjectBox, { schema: props.schema }, renderFields())
+        : renderFields()
     }
   }
 })

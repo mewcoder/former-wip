@@ -21,6 +21,6 @@ export interface WidgetPresetConfig {
 }
 
 export interface PresetConfig {
-  widgets: Record<string, WidgetPresetConfig | string>
+  widgets?: Record<string, WidgetPresetConfig | string>
   defaultModelProp?: string
 }

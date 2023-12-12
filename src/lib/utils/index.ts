@@ -59,3 +59,15 @@ export function getOrderProperties(schema: Schema) {
   }
   return orderProperties.filter((item) => !!item).concat(unOrderProperties)
 }
+
+export function isObjectField(schema: Schema) {
+  return schema.type === 'object' && schema?.properties
+}
+
+export function isArrayField(schema: Schema) {
+  return schema.type === 'array' && schema?.items
+}
+
+export function isEmptyField(schema: Schema) {
+  return !schema || Object.keys(schema).length === 0
+}

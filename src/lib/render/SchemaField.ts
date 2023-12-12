@@ -8,11 +8,11 @@ import {
   type Component,
   type PropType
 } from 'vue'
-import { ContextSymbol } from '../shared/context'
+import { ContextSymbol, defaultCtx } from '../shared/context'
 import {
-  getComponentByType,
-  getMappingProp,
-  getRules,
+  isEmptyField,
+  isObjectField,
+  isArrayField,
   parseExpression,
   isExpression
 } from '../utils'
@@ -21,6 +21,8 @@ import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
 import type { Schema } from '../types'
 import { SchemaKeys } from '../shared'
+import FormItemWrapper from './wrapper/FormItem'
+import GridWrapper from './wrapper/Grid'
 
 // 递归渲染
 export default defineComponent({
@@ -45,15 +47,11 @@ export default defineComponent({
     showObjectWrapper: {
       type: Boolean,
       default: true
-    },
-    showTitle: {
-      type: Boolean,
-      default: true
     }
   },
   inheritAttrs: false,
   setup(props) {
-    const ctx = inject(ContextSymbol, {})
+    const ctx = inject(ContextSymbol, defaultCtx)
 
     if (isEmptyField(props.schema)) return () => null
 
@@ -65,10 +63,6 @@ export default defineComponent({
     } else {
       Field = BasicField // 普通表单项
     }
-
-    const isNest = computed(() => {
-      return isObjectField(props.schema) || isArrayField(props.schema)
-    })
 
     const prop = computed(() => {
       return getProp(props.basePath, props.prop)
@@ -106,8 +100,7 @@ export default defineComponent({
             ? [...props.basePath, props.prop]
             : [...props.basePath],
           prop: prop.value,
-          showObjectWrapper: props.showObjectWrapper,
-          showTitle: props.showTitle
+          showObjectWrapper: props.showObjectWrapper
         })
       if (hidden.value) return null
 
@@ -117,46 +110,15 @@ export default defineComponent({
        * 2.数组对象
        */
       if (props.showFormItem) {
-        const { component: Col, presetProps: colPresetProps } =
-          getComponentByType(ctx.config, 'col')
-
-        // 嵌套数组和对象 占位
-        const spanConfig = isNest.value ? { span: 24 } : {}
-
-        const { component: FormItem, presetProps } = getComponentByType(
-          ctx.config,
-          'form-item'
-        )
-
-        const propKey = getMappingProp(ctx.config, 'form-item', 'prop', 'prop')
-
-        // prop 路径的数据类型  数组或字符串
-        const propType = getMappingProp(
-          ctx.config,
-          'form-item',
-          'propType',
-          'string'
-        )
-
-        const rules = getRules(props.schema)
-
         return h(
-          Col,
+          GridWrapper,
           {
-            ...colPresetProps,
-            ...spanConfig,
-            ...props.schema[SchemaKeys.GridProps]
+            schema: props.schema,
+            type: 'col'
           },
           () =>
-            h(
-              FormItem,
-              {
-                ...presetProps,
-                label: props.showTitle ? props.schema.title : undefined,
-                rules,
-                [propKey]: getPropPath(prop.value, propType)
-              },
-              () => renderField()
+            h(FormItemWrapper, { schema: props.schema, prop: prop.value }, () =>
+              renderField()
             )
         )
       } else {
@@ -167,25 +129,7 @@ export default defineComponent({
   }
 })
 
-function isEmptyField(schema: Schema) {
-  return !schema || Object.keys(schema).length === 0
-}
-
-function isObjectField(schema: Schema) {
-  return schema.type === 'object' && schema?.properties
-}
-
-function isArrayField(schema: Schema) {
-  return schema.type === 'array' && schema?.items
-}
-
 // 获取全路径 a.b.c
 function getProp(basePath: string[], prop: string) {
   return prop && basePath.length > 0 ? `${basePath.join('.')}.${prop}` : prop
-}
-
-// 获取form-item 传入的路径 某些组件库要求是数组
-function getPropPath(prop: string, propType: string) {
-  if (propType === 'array') return prop ? prop.split('.') : []
-  return prop
 }

@@ -5,4 +5,6 @@ export const ContextSymbol: InjectionKey<{
   schema: Schema
   formData: Record<string, any>
   config: PresetConfig
-}> = Symbol('former')
+}> = Symbol('Context')
+
+export const defaultCtx = { schema: {}, formData: {}, config: {} }

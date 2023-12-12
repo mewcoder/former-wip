@@ -8,11 +8,7 @@ import {
   type PropType
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
-import {
-  getOrderProperties,
-  getComponentByType,
-  getMappingProp
-} from '../utils'
+import { getComponentByType, getMappingProp } from '../utils'
 import SchemaField from './SchemaField'
 import type { PresetConfig, Schema } from '../types'
 
@@ -77,10 +73,10 @@ export default defineComponent({
           h(SchemaField, {
             schema: props.schema,
             showObjectWrapper: false,
-            showFormItem:false,
+            showFormItem: false
           }),
           // 默认插槽
-          slots.default && slots.default()
+          slots.default?.()
         ]
       )
   }
