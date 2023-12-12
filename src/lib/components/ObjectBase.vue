@@ -21,7 +21,7 @@ export default defineComponent({
 <style scoped>
 .vf-object-base {
   padding: 16px;
-  border: 1px solid #dcdfe6;
+  background-color: #f5f5f5;
   border-radius: 4px;
   flex: 1;
 }

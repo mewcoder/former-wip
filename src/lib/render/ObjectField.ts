@@ -1,9 +1,11 @@
-import { defineComponent, h, type PropType } from 'vue'
+import { defineComponent, inject, h, type PropType } from 'vue'
 import SchemaField from './SchemaField'
-import ObjectBox from '../components/ObjectBase.vue'
 import type { Schema } from '../types'
-import { getOrderProperties } from '../utils'
+import { getComponent, getOrderProperties } from '../utils'
 import GridWrapper from './wrapper/Grid'
+import { ContextSymbol, defaultCtx } from '../shared/context'
+import { SchemaKeys } from '../shared'
+import ObjectBase from '../components/ObjectBase.vue'
 
 export default defineComponent({
   name: 'ObjectField',
@@ -28,6 +30,8 @@ export default defineComponent({
   },
   inheritAttrs: false,
   setup(props) {
+    const ctx = inject(ContextSymbol, defaultCtx)
+
     return () => {
       const renderFields = () => {
         return h(GridWrapper, { schema: props.schema, type: 'row' }, () =>
@@ -41,9 +45,24 @@ export default defineComponent({
         )
       }
 
-      return props.showObjectWrapper
-        ? h(ObjectBox, { schema: props.schema }, renderFields())
-        : renderFields()
+      if (props.showObjectWrapper) {
+        // const { component: ObjectWrapper, presetProps } = getComponent(
+        //   props.schema,
+        //   ctx.config
+        // )
+
+        return h(
+          ObjectBase,
+          {
+            schema: props.schema,
+            // ...presetProps,
+            ...props.schema[SchemaKeys.WidgetProps]
+          },
+          renderFields()
+        )
+      }
+
+      return renderFields()
     }
   }
 })
