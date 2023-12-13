@@ -38,10 +38,6 @@ export default defineComponent({
       type: Array as PropType<string[]>,
       default: () => []
     },
-    showFormItem: {
-      type: Boolean,
-      default: true
-    },
     showObjectWrapper: {
       type: Boolean,
       default: true

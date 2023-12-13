@@ -48,14 +48,14 @@ export default defineComponent({
       return props.wrap
         ? h(
             FormItem,
-            props.prop
-              ? {
-                  ...presetProps,
-                  label: props.title || props.schema.title,
-                  rules,
-                  [propKey]: getPropPath(props.prop, propType)
-                }
-              : { label: props.title || props.schema.title },
+            {
+              ...presetProps,
+              label: props.title || props.schema.title,
+              rules,
+              ...(props.prop && {
+                [propKey]: getPropPath(props.prop, propType)
+              })
+            },
             () => slots.default?.()
           )
         : () => slots.default?.()

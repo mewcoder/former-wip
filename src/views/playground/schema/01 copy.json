@@ -1,18 +1,80 @@
 {
   "type": "object",
   "properties": {
+    "input1": {
+      "title": "输入框",
+      "type": "string",
+      "ui-widget": "input",
+      "max": 4,
+      "min": 2
+    },
+    "number1": {
+      "title": "数字输入框",
+      "type": "number",
+      "ui-widget": "input-number",
+      "ui-order": 1
+    },
+    "object1": {
+      "title": "嵌套对象",
+      "description": "测试对象嵌套功能",
+      "type": "object",
+      "properties": {
+        "objectKey_1": {
+          "title": "输入框",
+          "type": "string",
+          "ui-widget": "input",
+          "format": "email",
+          "ui-grid-props": {
+            "span": 8
+          }
+        },
+        "objectKey_2": {
+          "title": "数字输入框",
+          "type": "number",
+          "ui-widget": "input-number",
+          "min": 2,
+          "ui-grid-props": {
+            "span": 8
+          }
+        }
+      }
+    },
+    "object2": {
+      "title": "嵌套对象2",
+      "description": "测试对象嵌套功能",
+      "type": "object",
+      "required": true,
+      "ui-widget": "object-card",
+      "properties": {
+        "objectKey_1": {
+          "title": "输入框",
+          "type": "string",
+          "ui-widget": "input",
+          "ui-grid-props": {
+            "span": 24
+          }
+        },
+        "objectKey_2": {
+          "title": "数字输入框",
+          "type": "number",
+          "ui-widget": "input-number",
+          "ui-grid-props": {
+            "span": 24
+          }
+        }
+      }
+    },
     "listKey": {
       "title": "嵌套字符串数组",
-      "description": "嵌套功能",
+      "description": "测试对象数组嵌套功能",
       "type": "array",
       "min": 1,
       "max": 3,
       "required": true,
-      "ui-widget": "array-basic",
       "items": {
-        "title": "字符串",
         "type": "string",
-        "ui-widget": "input"
+        "ui-widget": "input",
+        "required": true
       }
     },
     "listKey2": {
@@ -22,7 +84,6 @@
       "min": 1,
       "max": 3,
       "required": true,
-      "ui-widget": "array-base",
       "items": {
         "type": "object",
         "properties": {

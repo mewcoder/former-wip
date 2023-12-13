@@ -71,7 +71,7 @@ interface SchemaValidation {
 // 和 UI 相关的扩展 Schema
 interface SchemaUI {
   /** 控件类型 */
-  [SchemaKeys.WidgetType]: string
+  [SchemaKeys.WidgetType]?: string
 
   /** 控件透传属性 */
   [SchemaKeys.WidgetProps]?: Record<string, any>

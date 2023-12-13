@@ -1,5 +1,6 @@
 <template>
-  <div class="vf-object-base">
+  <div class="object-card">
+    <div class="object-card__title">{{ schema.title }}</div>
     <slot></slot>
   </div>
 </template>
@@ -19,10 +20,16 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.vf-object-base {
-  padding: 16px;
+.object-card {
+  padding: 18px;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
   flex: 1;
+  margin-bottom: 18px;
+}
+
+.object-card__title {
+  height: 40px;
+  font-size: 16px;
 }
 </style>

@@ -5,7 +5,6 @@ import { getComponent, getOrderProperties } from '../utils'
 import GridWrapper from './wrapper/Grid'
 import { ContextSymbol, defaultCtx } from '../shared/context'
 import { SchemaKeys } from '../shared'
-import ObjectBase from '../components/ObjectBase.vue'
 
 export default defineComponent({
   name: 'ObjectField',
@@ -17,6 +16,9 @@ export default defineComponent({
     basePath: {
       type: Array as PropType<string[]>,
       default: () => []
+    },
+    prop: {
+      type: String,
     },
     /**
      * 是否显示对象容器，两种情况不需要：
@@ -54,12 +56,11 @@ export default defineComponent({
           'object-base'
         )
 
-        console.log(ObjectWrapper)
-
         return h(
           ObjectWrapper,
           {
             schema: props.schema,
+            prop: props.prop,
             ...presetProps,
             ...props.schema[SchemaKeys.WidgetProps]
           },

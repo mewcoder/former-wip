@@ -59,7 +59,7 @@ export function getComponentByType(
 
 export function getComponent(
   config: PresetConfig,
-  schema: { [SchemaKeys.WidgetType]: string },
+  schema: { [SchemaKeys.WidgetType]?: string },
   defaultWidgetType?: string
 ): {
   component: ConcreteComponent | string

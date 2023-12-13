@@ -1,9 +1,8 @@
 import { defineComponent, inject, h, ref, type PropType } from 'vue'
 import SchemaField from './SchemaField'
 import type { Schema } from '../types'
-import { ContextSymbol } from '../shared/context'
-import ArrayBase from '../components/ArrayBase.vue'
-import { getValue } from '../utils'
+import { ContextSymbol, defaultCtx } from '../shared/context'
+import { getComponent, getValue } from '../utils'
 
 export default defineComponent({
   name: 'ArrayField',
@@ -15,11 +14,14 @@ export default defineComponent({
     basePath: {
       type: Array as PropType<string[]>,
       required: true
+    },
+    prop: {
+      type: String
     }
   },
   inheritAttrs: false,
   setup(props) {
-    const ctx = inject(ContextSymbol, {})
+    const ctx = inject(ContextSymbol, defaultCtx)
 
     const list = ref<any[]>([])
 
@@ -30,14 +32,27 @@ export default defineComponent({
       getValue(ctx.formData, props.basePath)?.splice(i, 1)
     }
 
-    // 数组元素是基本类型
-    const isBasic = props.schema?.items?.type !== 'object'
+    const { component: ArrayWrapper, presetProps } = getComponent(
+      ctx.config,
+      props.schema,
+      'array-base'
+    )
+
+    function getSchema(schema: Schema, showTitle: boolean) {
+      if (!showTitle && schema.title) {
+        delete schema.title
+      }
+      return schema
+    }
 
     return () =>
       h(
-        ArrayBase,
+        // @ts-ignore
+        ArrayWrapper,
         {
           schema: props.schema,
+          prop: props.prop,
+          ...presetProps,
           list: list.value,
           operations: {
             add,
@@ -45,13 +60,12 @@ export default defineComponent({
           }
         },
         {
-          field: (fieldProps) =>
+          field: ({ prop, showTitle = true }) =>
             h(SchemaField, {
-              schema: props.schema.items || {},
+              schema: getSchema(props.schema.items || {}, showTitle),
               basePath: props.basePath,
-              showObjectWrapper: false,
-              showFormItem: isBasic,
-              ...fieldProps
+              prop,
+              showObjectWrapper: false
             })
         }
       )

@@ -13,7 +13,7 @@ export default defineComponent({
     },
     type: {
       type: String as PropType<'row' | 'col'>,
-      required: true // row / col
+      required: true
     },
     wrap: {
       type: Boolean,

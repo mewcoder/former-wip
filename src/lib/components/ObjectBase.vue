@@ -1,6 +1,6 @@
 <template>
   <FormItemWrapper :schema="schema">
-    <div class="vf-object-base">
+    <div class="object-base">
       <slot></slot>
     </div>
   </FormItemWrapper>
@@ -23,8 +23,8 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.vf-object-base {
-  padding: 16px;
+.object-base {
+  padding: 18px;
   background-color: #f5f5f5;
   border-radius: 4px;
   flex: 1;

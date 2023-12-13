@@ -2,20 +2,15 @@
   <FormItemWrapper :schema="schema" :prop="prop">
     <div class="array-base">
       <div v-for="(key, i) in list" :key="key" class="array-item">
-        <div class="field__header">
-          <div class="filed__title">{{ '#' + (i + 1) }}</div>
-          <div class="filed__operate">
-            <el-button
-              link
-              type="primary"
-              class="array-remove"
-              @click="handleRemove(i)"
-            >
-              删除
-            </el-button>
-          </div>
-        </div>
         <slot name="field" :prop="i + ''" :show-title="false"></slot>
+        <el-button
+          link
+          type="primary"
+          @click="handleRemove(i)"
+          class="array-remove"
+        >
+          删除
+        </el-button>
       </div>
       <el-button class="array-add" @click="handleAdd">添加</el-button>
     </div>
@@ -34,12 +29,12 @@ export default defineComponent({
       type: Object as PropType<Schema>,
       required: true
     },
-    prop: {
-      type: String
-    },
     list: {
       type: Array as PropType<any[]>,
       required: true
+    },
+    prop: {
+      type: String,
     },
     operations: {
       type: Object as PropType<any>,
@@ -64,30 +59,28 @@ export default defineComponent({
 </script>
 <style scoped>
 .array-base {
-  padding: 16px;
-  border: 1px solid #dcdfe6;
+  padding: 18px;
+  background-color: #f5f5f5;
   border-radius: 4px;
   flex: 1;
   color: #606266;
 }
 
 .array-item {
-  margin-bottom: 12px;
-  position: relative;
-  border: 1px solid #dcdfe6;
-  padding: 0 12px 12px 12px;
-  border-radius: 4px;
+  margin-bottom: 18px;
+  display: flex;
 }
 
-.field__header {
-  height: 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.array-item > :first-child {
+  flex: 1;
+}
+.array-remove {
+  width: 32px;
+  padding-left: 8px;
 }
 
 .array-add {
-  width: 100%;
+  width: calc(100% - 32px);
   border-style: dashed;
 }
 </style>
