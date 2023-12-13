@@ -5,6 +5,7 @@ export { set as setValue } from 'lodash-es'
 
 export * from './widget'
 export * from './validate'
+export * from './path'
 
 export function isExpression(expression: any) {
   if (typeof expression !== 'string') return false

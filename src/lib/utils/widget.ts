@@ -80,10 +80,11 @@ export function getComponent(
 // 获取 prop 映射
 export function getMappingProp(
   config: PresetConfig,
-  widgetType: string,
+  widgetType: string | undefined,
   prop: string,
   defaultProp: string
 ) {
+  if (!widgetType) return defaultProp
   const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
   if (widgetPresetConfig) {
     return widgetPresetConfig?.propMapping?.[prop] || defaultProp

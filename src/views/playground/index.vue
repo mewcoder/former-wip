@@ -32,7 +32,7 @@
           :key="curUI + refreshKey"
           ref="formRef"
           :schema="schema"
-          :widgets-config="config"
+          :config="config"
         >
           <el-button type="primary" @click="test">提交</el-button>
         </SchemaRender>

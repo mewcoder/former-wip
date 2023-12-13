@@ -1,38 +1,54 @@
 <template>
   <FormItemWrapper :schema="schema" :prop="prop">
-    <div class="array-base">
-      <div v-for="(key, i) in list" :key="key" class="array-item">
-        <div class="field__header">
-          <div class="filed__title">{{ '#' + (i + 1) }}</div>
-          <div class="filed__operate">
-            <el-button
-              link
-              type="primary"
-              class="array-remove"
-              @click="handleRemove(i)"
-            >
+    <div class="array-table">
+      <el-table :data="list">
+        <el-table-column label="序号" width="60px">
+          <template #default="scope">{{ scope.$index }} </template>
+        </el-table-column>
+        <el-table-column
+          v-for="item in orderProperties"
+          :key="item.key"
+          :label="item.schema.title"
+        >
+          <template #default="scope">
+            <SchemaField
+              :schema="item.schema"
+              :path="path"
+              :prop="scope.$index + item.key"
+              :show-title="false"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="100px">
+          <template #default="scope">
+            <el-button link type="primary" @click="handleRemove(scope.$index)">
               删除
             </el-button>
-          </div>
-        </div>
-        <slot name="field" :prop="i + ''" :show-title="false"></slot>
-      </div>
+          </template>
+        </el-table-column>
+      </el-table>
       <el-button class="array-add" @click="handleAdd">添加</el-button>
     </div>
   </FormItemWrapper>
 </template>
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue'
+import { defineComponent, computed, type PropType } from 'vue'
 import type { Schema } from '../types'
 import { FormItemWrapper } from '../index'
+import { getOrderProperties } from '../utils'
+import SchemaField from '../render/SchemaField'
 
 export default defineComponent({
   name: 'ArrayBase',
-  components: { FormItemWrapper },
+  components: { FormItemWrapper, SchemaField },
   props: {
     schema: {
       type: Object as PropType<Schema>,
       required: true
+    },
+    path: {
+      type: Array as PropType<string[]>,
+      default: () => []
     },
     prop: {
       type: String
@@ -48,6 +64,12 @@ export default defineComponent({
   },
   inheritAttrs: false,
   setup(props) {
+    const orderProperties = computed(() => {
+      return getOrderProperties(props.schema?.items || {})
+    })
+
+    console.log(props.schema, orderProperties.value)
+
     function handleRemove(index: number) {
       props.operations?.remove(index)
     }
@@ -56,6 +78,7 @@ export default defineComponent({
       props.operations?.add()
     }
     return {
+      orderProperties,
       handleAdd,
       handleRemove
     }
@@ -63,7 +86,7 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.array-base {
+.array-table {
   padding: 16px;
   border: 1px solid #dcdfe6;
   border-radius: 4px;

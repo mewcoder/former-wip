@@ -1,8 +1,8 @@
 import { defineComponent, inject, h, ref, type PropType } from 'vue'
-import SchemaField from './SchemaField'
-import type { Schema } from '../types'
-import { ContextSymbol, defaultCtx } from '../shared/context'
-import { getComponent, getValue } from '../utils'
+import SchemaField from '../SchemaField'
+import type { Schema } from '../../types'
+import { ContextSymbol, defaultCtx } from '../../shared/context'
+import { getComponent, getValue } from '../../utils'
 
 export default defineComponent({
   name: 'ArrayField',
@@ -11,12 +11,13 @@ export default defineComponent({
       type: Object as PropType<Schema>,
       required: true
     },
-    basePath: {
+    path: {
       type: Array as PropType<string[]>,
-      required: true
+      default: () => []
     },
     prop: {
-      type: String
+      type: String,
+      default: ''
     }
   },
   inheritAttrs: false,
@@ -29,7 +30,7 @@ export default defineComponent({
 
     const remove = (i: number) => {
       list.value.splice(i, 1)
-      getValue(ctx.formData, props.basePath)?.splice(i, 1)
+      getValue(ctx.formData, props.path)?.splice(i, 1)
     }
 
     const { component: ArrayWrapper, presetProps } = getComponent(
@@ -52,6 +53,7 @@ export default defineComponent({
         {
           schema: props.schema,
           prop: props.prop,
+          path: props.path,
           ...presetProps,
           list: list.value,
           operations: {
@@ -63,9 +65,8 @@ export default defineComponent({
           field: ({ prop, showTitle = true }) =>
             h(SchemaField, {
               schema: getSchema(props.schema.items || {}, showTitle),
-              basePath: props.basePath,
-              prop,
-              showObjectWrapper: false
+              path: props.path,
+              prop
             })
         }
       )

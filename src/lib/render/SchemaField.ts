@@ -14,11 +14,10 @@ import {
   isObjectField,
   isArrayField,
   parseExpression,
-  isExpression
+  isExpression,
+  getPath
 } from '../utils'
-import BasicField from './BasicField'
-import ObjectField from './ObjectField'
-import ArrayField from './ArrayField'
+import { BasicField, ObjectField, ArrayField } from './field'
 import type { Schema } from '../types'
 import { SchemaKeys } from '../shared'
 
@@ -30,15 +29,15 @@ export default defineComponent({
       type: Object as PropType<Schema>,
       required: true
     },
-    prop: {
-      type: String,
-      default: ''
-    },
-    basePath: {
+    path: {
       type: Array as PropType<string[]>,
       default: () => []
     },
-    showObjectWrapper: {
+    prop: {
+      type: String, // 对象的key 或 数组的下标
+      default: ''
+    },
+    showTitle: {
       type: Boolean,
       default: true
     }
@@ -58,19 +57,19 @@ export default defineComponent({
       Field = BasicField // 普通表单项
     }
 
-    const prop = computed(() => {
-      return getProp(props.basePath, props.prop)
+    const path = computed(() => {
+      return getPath(props.path, props.prop)
     })
 
     const hidden = ref(false)
 
+    // 联动
     const deps = props.schema.dependencies
 
     if (deps) {
       watch(
         deps.map((path) => () => ctx.formData[path]),
         () => {
-          console.log('watch deps change', deps)
           let hid = false
           const val = props.schema[SchemaKeys.Hidden]
           if (val) {
@@ -86,25 +85,16 @@ export default defineComponent({
         }
       )
     }
+
     return () => {
       if (hidden.value) return null
 
       return h(Field, {
         schema: props.schema,
-        basePath: getBasePath(props.basePath, props.prop),
-        prop: prop.value,
-        showObjectWrapper: props.showObjectWrapper
+        path: path.value,
+        prop: path.value.join('.'),
+        showTitle: props.showTitle
       })
     }
   }
 })
-
-// 获取全路径 a.b.c
-function getProp(basePath: string[], prop: string) {
-  return prop && basePath.length > 0 ? `${basePath.join('.')}.${prop}` : prop
-}
-
-// 拼接路径
-function getBasePath(basePath: string[], prop: string) {
-  return prop ? [...basePath, prop] : [...basePath]
-}

@@ -19,7 +19,7 @@ export default defineComponent({
       type: Object as PropType<Schema>,
       required: true
     },
-    widgetsConfig: {
+    config: {
       type: Object as PropType<PresetConfig>,
       default: () => ({}),
       required: true
@@ -28,6 +28,7 @@ export default defineComponent({
   inheritAttrs: true,
   setup(props, { expose, slots }) {
     const formRef = ref(null)
+
     const formData = reactive({})
 
     expose({
@@ -38,22 +39,17 @@ export default defineComponent({
     provide(ContextSymbol, {
       schema: props.schema,
       formData,
-      config: props.widgetsConfig
+      config: props.config
     })
 
     // 获取表单组件, 如: el-form
     const { component: Form, presetProps } = getComponentByType(
-      props.widgetsConfig,
+      props.config,
       'form'
     )
 
     // 表单数据绑定的key, 如: model
-    const modelProp = getMappingProp(
-      props.widgetsConfig,
-      'form',
-      'model',
-      'model'
-    )
+    const modelProp = getMappingProp(props.config, 'form', 'model', 'model')
 
     return () =>
       h(
@@ -71,9 +67,7 @@ export default defineComponent({
         },
         () => [
           h(SchemaField, {
-            schema: props.schema,
-            showObjectWrapper: false,
-            showFormItem: false
+            schema: props.schema
           }),
           // 默认插槽
           slots.default?.()

@@ -13,8 +13,9 @@ export default defineComponent({
     prop: {
       type: String
     },
-    title: {
-      type: String
+    showTitle: {
+      type: Boolean,
+      default: true
     },
     wrap: {
       type: Boolean,
@@ -44,13 +45,12 @@ export default defineComponent({
 
     return () => {
       const rules = getRules(props.schema)
-      console.log(props.schema.title, rules)
       return props.wrap
         ? h(
             FormItem,
             {
               ...presetProps,
-              label: props.title || props.schema.title,
+              label: props.showTitle ? props.schema.title : undefined,
               rules,
               ...(props.prop && {
                 [propKey]: getPropPath(props.prop, propType)

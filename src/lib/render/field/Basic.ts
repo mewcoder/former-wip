@@ -6,35 +6,42 @@ import {
   Fragment,
   type PropType
 } from 'vue'
-import { ContextSymbol } from '../shared/context'
+import { ContextSymbol, defaultCtx } from '../../shared/context'
 import {
   getComponent,
   getValue,
   setValue,
   getMappingProp,
   getChildren
-} from '../utils'
-import type { WidgetChildrenItem } from '../types'
-import { SchemaKeys } from '../shared'
-import FormItemWrapper from './wrapper/FormItem'
+} from '../../utils'
+import type { WidgetChildrenItem } from '../../types'
+import { SchemaKeys } from '../../shared'
+import FormItemWrapper from '../wrapper/FormItem'
+import type { Schema } from '../../types'
 
 export default defineComponent({
   name: 'BasicField',
   props: {
-    // 表单key值
-    prop: {
-      type: String,
+    schema: {
+      type: Object as PropType<Schema>,
       required: true
     },
-    // 表单项 Schema
-    schema: {
-      type: Object as PropType<any>,
-      required: true
+    path: {
+      type: Array as PropType<string[]>,
+      default: () => []
+    },
+    prop: {
+      type: String,
+      default: ''
+    },
+    showTitle: {
+      type: Boolean,
+      default: true
     }
   },
   inheritAttrs: false,
   setup(props) {
-    const ctx = inject(ContextSymbol, {})
+    const ctx = inject(ContextSymbol, defaultCtx)
 
     const { component: Widget, presetProps } = getComponent(
       ctx.config,
@@ -45,6 +52,7 @@ export default defineComponent({
       ctx.config,
       props.schema[SchemaKeys.WidgetType],
       'model',
+      // @ts-ignore
       ctx.config?.defaultModelProp || 'modelValue'
     )
 
@@ -60,19 +68,22 @@ export default defineComponent({
     const children = getChildren(props.schema, ctx.config)
 
     return () =>
-      h(FormItemWrapper, { schema: props.schema, prop: props.prop }, () =>
-        h(
-          Widget,
-          {
-            ...presetProps,
-            ...props.schema[SchemaKeys.WidgetProps],
-            [modelProp]: modelValue.value,
-            [`onUpdate:${modelProp}`]: ($event: any) => {
-              modelValue.value = $event
-            }
-          },
-          () => children?.length && h(WidgetChildren, { children: children })
-        )
+      h(
+        FormItemWrapper,
+        { schema: props.schema, prop: props.prop, showTitle: props.showTitle },
+        () =>
+          h(
+            Widget,
+            {
+              ...presetProps,
+              ...props.schema[SchemaKeys.WidgetProps],
+              [modelProp]: modelValue.value,
+              [`onUpdate:${modelProp}`]: ($event: any) => {
+                modelValue.value = $event
+              }
+            },
+            () => children?.length && h(WidgetChildren, { children: children })
+          )
       )
   }
 })
