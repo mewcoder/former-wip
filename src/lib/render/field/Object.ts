@@ -20,6 +20,10 @@ export default defineComponent({
     prop: {
       type: String,
       default: ''
+    },
+    showWrapper: {
+      type: Boolean,
+      default: true
     }
   },
   inheritAttrs: false,
@@ -41,7 +45,7 @@ export default defineComponent({
         )
       }
       // 根对象时为空，不需要 wrapper
-      if (!props.prop) return renderFields()
+      if (!props.prop || !props.showWrapper) return renderFields()
 
       const { component: ObjectWrapper, presetProps } = getComponent(
         ctx.config,

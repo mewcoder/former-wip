@@ -36,14 +36,10 @@ export default defineComponent({
     prop: {
       type: String, // 对象的key 或 数组的下标
       default: ''
-    },
-    showTitle: {
-      type: Boolean,
-      default: true
     }
   },
   inheritAttrs: false,
-  setup(props) {
+  setup(props, { attrs }) {
     const ctx = inject(ContextSymbol, defaultCtx)
 
     if (isEmptyField(props.schema)) return () => null
@@ -93,7 +89,7 @@ export default defineComponent({
         schema: props.schema,
         path: path.value,
         prop: path.value.join('.'),
-        showTitle: props.showTitle
+        ...attrs
       })
     }
   }

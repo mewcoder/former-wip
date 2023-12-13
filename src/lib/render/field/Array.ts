@@ -39,13 +39,6 @@ export default defineComponent({
       'array-base'
     )
 
-    function getSchema(schema: Schema, showTitle: boolean) {
-      if (!showTitle && schema.title) {
-        delete schema.title
-      }
-      return schema
-    }
-
     return () =>
       h(
         // @ts-ignore
@@ -62,11 +55,13 @@ export default defineComponent({
           }
         },
         {
-          field: ({ prop, showTitle = true }) =>
+          field: ({ prop }) =>
             h(SchemaField, {
-              schema: getSchema(props.schema.items || {}, showTitle),
+              schema: props.schema.items || {},
               path: props.path,
-              prop
+              prop,
+              showTitle: false,
+              showWrapper: false
             })
         }
       )

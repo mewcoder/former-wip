@@ -68,8 +68,6 @@ export default defineComponent({
       return getOrderProperties(props.schema?.items || {})
     })
 
-    console.log(props.schema, orderProperties.value)
-
     function handleRemove(index: number) {
       props.operations?.remove(index)
     }
@@ -112,5 +110,8 @@ export default defineComponent({
 .array-add {
   width: 100%;
   border-style: dashed;
+}
+:deep(.el-table .cell > :first-child) {
+  margin: 0;
 }
 </style>

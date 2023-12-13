@@ -98,7 +98,7 @@ const WidgetChildren = defineComponent({
   },
   inheritAttrs: false,
   setup(props) {
-    const ctx = inject(ContextSymbol, {})
+    const ctx = inject(ContextSymbol, defaultCtx)
 
     return () =>
       props.children.map((item) => {
