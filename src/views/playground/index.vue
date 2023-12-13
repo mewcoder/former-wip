@@ -41,6 +41,14 @@
       </div>
     </main>
   </div>
+  <el-drawer v-model="showDrawer" title="FormData">
+    <MonocoEditor
+      v-model="formStr"
+      :readOnly="true"
+      :minimap="{ enabled: false }"
+      lineNumbers="off"
+    />
+  </el-drawer>
 </template>
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted } from 'vue'
@@ -65,6 +73,9 @@ const jsonStr = ref('{}')
 const curJson = ref(0)
 
 const refreshKey = ref(0)
+
+const showDrawer = ref(false)
+const formStr = ref('{}')
 
 watch(
   () => curJson.value,
@@ -99,10 +110,10 @@ const config = computed(() => {
 const test = async () => {
   try {
     const data = formRef.value.getFormData()
-    console.log('🚀 ~ formRef:', data)
     const valid = await formRef.value.getFormInstance()?.validate()
     if (valid) {
-      alert(JSON.stringify(data, null, 2))
+      formStr.value = JSON.stringify(data, null, 2)
+      showDrawer.value = true
     }
   } catch (error) {
     console.log('🚀 ~  error:', error)

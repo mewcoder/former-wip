@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, useAttrs } from 'vue'
 import * as monaco from 'monaco-editor'
 import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
@@ -40,6 +40,10 @@ watch(
   }
 )
 
+const attrs = useAttrs()
+
+console.log(attrs)
+
 onMounted(() => {
   monacoEditor = monaco.editor.create(editorRef.value, {
     value: props.modelValue,
@@ -47,7 +51,8 @@ onMounted(() => {
     language: 'json',
     theme: 'vs',
     selectOnLineNumbers: true,
-    automaticLayout: true
+    automaticLayout: true,
+    ...attrs
   })
   // 监听值变化
   monacoEditor.onDidChangeModelContent(() => {
@@ -55,6 +60,12 @@ onMounted(() => {
     emit('update:modelValue', currenValue)
   })
 })
+</script>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false
+}
 </script>
 
 <style scoped>
