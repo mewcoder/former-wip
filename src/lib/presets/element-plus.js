@@ -1,5 +1,8 @@
+import ObjectBase from '../components/ObjectBase.vue'
+
 export default {
   widgets: {
+    'object-base': ObjectBase,
     'form': {
       widget: 'el-form',
       props: {

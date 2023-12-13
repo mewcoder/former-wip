@@ -21,8 +21,6 @@ import ObjectField from './ObjectField'
 import ArrayField from './ArrayField'
 import type { Schema } from '../types'
 import { SchemaKeys } from '../shared'
-import FormItemWrapper from './wrapper/FormItem'
-import GridWrapper from './wrapper/Grid'
 
 // 递归渲染
 export default defineComponent({
@@ -93,38 +91,14 @@ export default defineComponent({
       )
     }
     return () => {
-      const renderField = () =>
-        h(Field, {
-          schema: props.schema,
-          basePath: props.prop
-            ? [...props.basePath, props.prop]
-            : [...props.basePath],
-          prop: prop.value,
-          showObjectWrapper: props.showObjectWrapper
-        })
       if (hidden.value) return null
 
-      /**
-       * 是否包裹FormItem，两种情况不需要：
-       * 1.根对象
-       * 2.数组对象
-       */
-      if (props.showFormItem) {
-        return h(
-          GridWrapper,
-          {
-            schema: props.schema,
-            type: 'col'
-          },
-          () =>
-            h(FormItemWrapper, { schema: props.schema, prop: prop.value }, () =>
-              renderField()
-            )
-        )
-      } else {
-        // 直接渲染
-        return renderField()
-      }
+      return h(Field, {
+        schema: props.schema,
+        basePath: getBasePath(props.basePath, props.prop),
+        prop: prop.value,
+        showObjectWrapper: props.showObjectWrapper
+      })
     }
   }
 })
@@ -132,4 +106,9 @@ export default defineComponent({
 // 获取全路径 a.b.c
 function getProp(basePath: string[], prop: string) {
   return prop && basePath.length > 0 ? `${basePath.join('.')}.${prop}` : prop
+}
+
+// 拼接路径
+function getBasePath(basePath: string[], prop: string) {
+  return prop ? [...basePath, prop] : [...basePath]
 }

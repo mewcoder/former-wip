@@ -16,6 +16,7 @@ import {
 } from '../utils'
 import type { WidgetChildrenItem } from '../types'
 import { SchemaKeys } from '../shared'
+import FormItemWrapper from './wrapper/FormItem'
 
 export default defineComponent({
   name: 'BasicField',
@@ -36,8 +37,8 @@ export default defineComponent({
     const ctx = inject(ContextSymbol, {})
 
     const { component: Widget, presetProps } = getComponent(
-      props.schema,
-      ctx.config
+      ctx.config,
+      props.schema
     )
 
     const modelProp = getMappingProp(
@@ -59,17 +60,19 @@ export default defineComponent({
     const children = getChildren(props.schema, ctx.config)
 
     return () =>
-      h(
-        Widget,
-        {
-          ...presetProps,
-          ...props.schema[SchemaKeys.WidgetProps],
-          [modelProp]: modelValue.value,
-          [`onUpdate:${modelProp}`]: ($event: any) => {
-            modelValue.value = $event
-          }
-        },
-        () => children?.length && h(WidgetChildren, { children: children })
+      h(FormItemWrapper, { schema: props.schema, prop: props.prop }, () =>
+        h(
+          Widget,
+          {
+            ...presetProps,
+            ...props.schema[SchemaKeys.WidgetProps],
+            [modelProp]: modelValue.value,
+            [`onUpdate:${modelProp}`]: ($event: any) => {
+              modelValue.value = $event
+            }
+          },
+          () => children?.length && h(WidgetChildren, { children: children })
+        )
       )
   }
 })
@@ -93,8 +96,8 @@ const WidgetChildren = defineComponent({
           return h(Fragment, null, [item])
         } else if (isChildrenItem(item)) {
           const { component: WidgetChild, presetProps } = getComponent(
-            item,
-            ctx.config
+            ctx.config,
+            item
           )
 
           return h(

@@ -16,18 +16,19 @@ function getWidgetPresetConfig(
     return
   }
   const widgetConfig = config?.widgets?.[widgetType]
-  if (typeof widgetConfig === 'string') {
+  if (!widgetConfig) return
+  if (!isWidgetPresetConfig(widgetConfig))
     return {
       widget: widgetConfig
     }
-  } else {
-    return widgetConfig
-  }
+  return widgetConfig
 }
 
 // 判断是配置对象
-export function isWidgetPresetConfig(widgetPresetConfig: WidgetPresetConfig) {
-  return typeof widgetPresetConfig === 'object' && widgetPresetConfig !== null
+export function isWidgetPresetConfig(
+  config: any
+): config is WidgetPresetConfig {
+  return typeof config === 'object' && 'widget' in config
 }
 
 export function getComponentByType(
@@ -42,6 +43,7 @@ export function getComponentByType(
 
   const component: ConcreteComponent | string =
     widgetPresetConfig?.widget || widgetType
+
   const presetProps = widgetPresetConfig?.props || {}
 
   return typeof component === 'string'
@@ -56,13 +58,14 @@ export function getComponentByType(
 }
 
 export function getComponent(
+  config: PresetConfig,
   schema: { [SchemaKeys.WidgetType]: string },
-  config: PresetConfig
+  defaultWidgetType?: string
 ): {
   component: ConcreteComponent | string
   presetProps: object
 } {
-  const widgetType = schema[SchemaKeys.WidgetType]
+  const widgetType = schema[SchemaKeys.WidgetType] || defaultWidgetType
 
   if (!widgetType) {
     console.warn('widget is required')

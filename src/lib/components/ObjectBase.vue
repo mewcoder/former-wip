@@ -1,14 +1,18 @@
 <template>
-  <div class="vf-object-base">
-    <slot></slot>
-  </div>
+  <FormItemWrapper :schema="schema">
+    <div class="vf-object-base">
+      <slot></slot>
+    </div>
+  </FormItemWrapper>
 </template>
 <script lang="ts">
 import { defineComponent, type PropType } from 'vue'
 import type { Schema } from '../types'
+import { FormItemWrapper } from '../index'
 
 export default defineComponent({
   name: 'ObjectBase',
+  components: { FormItemWrapper },
   props: {
     schema: {
       type: Object as PropType<Schema>,

@@ -1,3 +1,1 @@
-import SchemaRender from './render'
-
-export { SchemaRender }
+export * from './render'

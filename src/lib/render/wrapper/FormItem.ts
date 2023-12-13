@@ -44,6 +44,7 @@ export default defineComponent({
 
     return () => {
       const rules = getRules(props.schema)
+      console.log(props.schema.title, rules)
       return props.wrap
         ? h(
             FormItem,

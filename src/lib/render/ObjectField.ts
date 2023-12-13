@@ -36,29 +36,34 @@ export default defineComponent({
       const renderFields = () => {
         return h(GridWrapper, { schema: props.schema, type: 'row' }, () =>
           getOrderProperties(props.schema).map(({ key, schema }) =>
-            h(SchemaField, {
-              schema: schema,
-              basePath: props.basePath,
-              prop: key
-            })
+            h(GridWrapper, { schema: schema, type: 'col' }, () =>
+              h(SchemaField, {
+                schema: schema,
+                basePath: props.basePath,
+                prop: key
+              })
+            )
           )
         )
       }
 
       if (props.showObjectWrapper) {
-        // const { component: ObjectWrapper, presetProps } = getComponent(
-        //   props.schema,
-        //   ctx.config
-        // )
+        const { component: ObjectWrapper, presetProps } = getComponent(
+          ctx.config,
+          props.schema,
+          'object-base'
+        )
+
+        console.log(ObjectWrapper)
 
         return h(
-          ObjectBase,
+          ObjectWrapper,
           {
             schema: props.schema,
-            // ...presetProps,
+            ...presetProps,
             ...props.schema[SchemaKeys.WidgetProps]
           },
-          renderFields()
+          () => renderFields()
         )
       }
 
