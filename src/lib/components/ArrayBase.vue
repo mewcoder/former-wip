@@ -15,7 +15,7 @@
             </el-button>
           </div>
         </div>
-        <slot name="field" :prop="i + ''" :show-title="false"></slot>
+        <slot :prop="i + ''" :show-title="false"></slot>
       </div>
       <el-button class="array-add" @click="handleAdd">添加</el-button>
     </div>

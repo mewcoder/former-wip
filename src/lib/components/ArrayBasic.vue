@@ -2,7 +2,7 @@
   <FormItemWrapper :schema="schema" :prop="prop">
     <div class="array-base">
       <div v-for="(key, i) in list" :key="key" class="array-item">
-        <slot name="field" :prop="i + ''" :show-title="false"></slot>
+        <slot  :prop="i + ''" :show-title="false"></slot>
         <el-button
           link
           type="primary"

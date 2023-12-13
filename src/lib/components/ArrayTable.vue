@@ -1,7 +1,7 @@
 <template>
   <FormItemWrapper :schema="schema" :prop="prop">
     <div class="array-table">
-      <el-table :data="list">
+      <el-table :data="list" empty-text="暂无数据">
         <el-table-column label="序号" width="60px">
           <template #default="scope">{{ scope.$index }} </template>
         </el-table-column>
@@ -36,7 +36,7 @@ import { defineComponent, computed, type PropType } from 'vue'
 import type { Schema } from '../types'
 import { FormItemWrapper } from '../index'
 import { getOrderProperties } from '../utils'
-import SchemaField from '../render/SchemaField'
+import { SchemaField } from '../index'
 
 export default defineComponent({
   name: 'ArrayBase',

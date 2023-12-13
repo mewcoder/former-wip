@@ -54,16 +54,15 @@ export default defineComponent({
             remove
           }
         },
-        {
-          field: ({ prop }) =>
-            h(SchemaField, {
-              schema: props.schema.items || {},
-              path: props.path,
-              prop,
-              showTitle: false,
-              showWrapper: false
-            })
-        }
+
+        ({ prop }) =>
+          h(SchemaField, {
+            schema: props.schema.items || {},
+            path: props.path,
+            prop,
+            showTitle: false,
+            showWrapper: false
+          })
       )
   }
 })
