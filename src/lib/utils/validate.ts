@@ -24,6 +24,7 @@ function addLengthRule(schema: Schema, rules: RuleItem[]) {
   const { type, max, min, title } = schema
 
   if (max || max === 0) {
+    // todo
     rules.push({ type, max, message: `${title}长度不能大于${max}` })
   }
 

@@ -11,6 +11,7 @@ import { ContextSymbol } from '../shared/context'
 import { getComponentByType, getMappingProp } from '../utils'
 import SchemaField from './SchemaField'
 import type { PresetConfig, Schema } from '../types'
+import { SchemaKeys } from '../shared'
 
 export default defineComponent({
   name: 'MainForm',
@@ -56,6 +57,7 @@ export default defineComponent({
         Form,
         {
           ...presetProps,
+          ...props.schema[SchemaKeys.FormProps],
           ref: formRef,
           [modelProp]: formData,
           onSubmit: withModifiers(

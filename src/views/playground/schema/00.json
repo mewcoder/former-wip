@@ -1,0 +1,125 @@
+{
+  "type": "object",
+  "ui-form-props": {
+    "label-width": 120
+  },
+  "properties": {
+    "input1": {
+      "title": "输入框",
+      "type": "string",
+      "ui-widget": "input"
+    },
+    "number1": {
+      "title": "数字输入框",
+      "type": "number",
+      "ui-widget": "input-number"
+    },
+    "select1": {
+      "title": "下拉单选",
+      "type": "string",
+      "ui-widget": "select",
+      "ui-props": {
+        "options": [
+          {
+            "label": "早",
+            "value": "a"
+          },
+          {
+            "label": "中",
+            "value": "b"
+          },
+          {
+            "label": "晚",
+            "value": "c"
+          }
+        ]
+      }
+    },
+    "multiSelect1": {
+      "title": "多选",
+      "type": "array",
+      "ui-widget": "multi-select",
+      "ui-props": {
+        "options": [
+          {
+            "label": "杭州",
+            "value": "a"
+          },
+          {
+            "label": "武汉",
+            "value": "b"
+          },
+          {
+            "label": "湖州",
+            "value": "c"
+          },
+          {
+            "label": "贵阳",
+            "value": "d"
+          }
+        ]
+      }
+    },
+    "radio1": {
+      "title": "点击单选",
+      "type": "string",
+      "ui-widget": "radio-group",
+      "ui-props": {
+        "options": [
+          {
+            "label": "早",
+            "value": "a"
+          },
+          {
+            "label": "中",
+            "value": "b"
+          },
+          {
+            "label": "晚",
+            "value": "c"
+          }
+        ]
+      }
+    },
+    "checkboxes1": {
+      "title": "点击多选",
+      "type": "array",
+      "ui-widget": "checkbox-group",
+      "ui-props": {
+        "options": [
+          {
+            "label": "杭州",
+            "value": "a"
+          },
+          {
+            "label": "武汉",
+            "value": "b"
+          },
+          {
+            "label": "湖州",
+            "value": "c"
+          },
+          {
+            "label": "贵阳",
+            "value": "d"
+          }
+        ]
+      }
+    },
+    "textarea1": {
+      "title": "长文本",
+      "type": "string",
+      "ui-widget": "textarea"
+    },
+    "switch1": {
+      "title": "开关",
+      "type": "boolean",
+      "ui-widget": "switch"
+    },
+    "checkbox1": {
+      "title": "是否选择",
+      "type": "boolean",
+      "ui-widget": "checkbox"
+    }
+  }
+}

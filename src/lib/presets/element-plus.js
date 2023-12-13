@@ -1,22 +1,10 @@
-import ObjectBase from '../components/ObjectBase.vue'
-import ObjectCard from '../components/ObjectCard.vue'
-import ArrayBase from '../components/ArrayBase.vue'
-import ArrayBasic from '../components/ArrayBasic.vue'
-import ArrayTable from '../components/ArrayTable.vue'
-
+import components from '../components'
 
 export default {
   widgets: {
-    'object-base': ObjectBase,
-    'object-card': ObjectCard,
-    'array-base': ArrayBase,
-    'array-basic': ArrayBasic,
-    'array-table': ArrayTable,
+    ...components,
     'form': {
-      widget: 'el-form',
-      props: {
-        'label-position': 'top'
-      }
+      widget: 'el-form'
     },
     'form-item': 'el-form-item',
     'row': {
@@ -26,10 +14,7 @@ export default {
       }
     },
     'col': {
-      widget: 'el-col',
-      props: {
-        span: 12
-      }
+      widget: 'el-col'
     },
     'input': 'el-input',
     'textarea': {
@@ -64,7 +49,6 @@ export default {
   }
 }
 
-// todo
 function getSelectChildren(options, widget) {
   return options.map((item) => ({
     'ui-widget': widget,
@@ -75,7 +59,7 @@ function getSelectChildren(options, widget) {
 function getGroupChildren(options, widget) {
   return options.map((item) => ({
     'ui-widget': widget,
-    'ui-props': { label: item.value },
+    'ui-props': { label: item.value }, 
     'ui-children': [item.label]
   }))
 }

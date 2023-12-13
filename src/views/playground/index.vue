@@ -3,24 +3,26 @@
     <header class="bar">
       <div class="title">
         <span style="margin-right: 20px">🎮 VueFormer Playground</span>
-        <el-select v-model="curJson">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+        <div style="margin-top: 10px">
+          <el-radio-group v-model="curJson" size="small">
+            <el-radio-button
+              v-for="item in options"
+              :key="item.value"
+              :label="item.value"
+              >{{ item.label }}
+            </el-radio-button>
+          </el-radio-group>
+        </div>
       </div>
       <div class="ui">
         <div>
           <span style="margin-right: 10px">组件库：</span>
-          <el-radio-group v-model="curUI" class="ml-4">
+          <el-radio-group v-model="curUI">
             <el-radio label="ep">Element Plus</el-radio>
             <el-radio label="antdv">Ant Design Vue</el-radio>
           </el-radio-group>
         </div>
-        <el-button @click="forceUpdate">ForceUpdate</el-button>
+        <el-button @click="forceUpdate">强制刷新</el-button>
       </div>
     </header>
     <main class="container">
@@ -43,34 +45,31 @@
 <script lang="ts" setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import MonocoEditor from '@/components/MonacoEditor/index.vue'
-import test01 from './schema/01.json'
-import test02 from './schema/02.json'
+import json0 from './schema/00.json'
+import json1 from './schema/01.json'
+import json2 from './schema/02.json'
+import json3 from './schema/03.json'
 import { SchemaRender } from '@/lib'
 import epConfig from '@/lib/presets/element-plus'
 import antdvConfig from '@/lib/presets/antdv'
 import Split from 'split.js'
 
+const jsonList = [json0, json1, json2, json3]
+
 onMounted(() => {
   Split(['#editor', '#preview'], { minSize: 350, gutterSize: 14 })
 })
 
-const jsonStr = ref(JSON.stringify(test01, null, 2))
+const jsonStr = ref('{}')
 
-const curJson = ref('01')
+const curJson = ref(0)
 
 const refreshKey = ref(0)
 
 watch(
   () => curJson.value,
   (val) => {
-    switch (val) {
-      case '01':
-        jsonStr.value = JSON.stringify(test01, null, 2)
-        break
-      case '02':
-        jsonStr.value = JSON.stringify(test02, null, 2)
-        break
-    }
+    jsonStr.value = JSON.stringify(jsonList[val], null, 2)
     refreshKey.value++
   },
   {
@@ -116,12 +115,20 @@ const forceUpdate = () => {
 
 const options = [
   {
-    value: '01',
-    label: '01'
+    value: 0,
+    label: '基础表单'
   },
   {
-    value: '02',
-    label: '02'
+    value: 1,
+    label: '嵌套对象'
+  },
+  {
+    value: 2,
+    label: '嵌套数组'
+  },
+  {
+    value: 3,
+    label: '简单联动'
   }
 ]
 </script>
@@ -134,11 +141,9 @@ const options = [
 .bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  height: 50px;
-  padding: 0 16px;
+  height: 80px;
+  padding: 16px;
   border-bottom: 1px solid darkgray;
-  line-height: 50px;
 
   .ui {
     width: 50%;
@@ -153,7 +158,7 @@ const options = [
 }
 
 .container {
-  height: calc(100% - 50px);
+  height: calc(100% - 80px);
   display: flex;
   #editor {
     height: 100%;
@@ -180,4 +185,3 @@ const options = [
   cursor: col-resize;
 }
 </style>
-@/lib/presets/element-plus@/lib/presets/antdv

@@ -1,16 +1,8 @@
-import ObjectBase from '../components/ObjectBase.vue'
-import ObjectCard from '../components/ObjectCard.vue'
-import ArrayBase from '../components/ArrayBase.vue'
-import ArrayBasic from '../components/ArrayBasic.vue'
-import ArrayTable from '../components/ArrayTable.vue'
+import components from '../components'
 
 export default {
   widgets: {
-    'object-base': ObjectBase,
-    'object-card': ObjectCard,
-    'array-base': ArrayBase,
-    'array-basic': ArrayBasic,
-    'array-table': ArrayTable,
+    ...components,
     'form': {
       widget: 'a-form',
       props: {

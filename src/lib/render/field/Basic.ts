@@ -82,7 +82,7 @@ export default defineComponent({
                 modelValue.value = $event
               }
             },
-            () => children?.length && h(WidgetChildren, { children: children })
+            () => h(WidgetChildren, { children: children })
           )
       )
   }

@@ -1,16 +1,17 @@
 {
   "type": "object",
+  "ui-form-props": {
+    "label-position": "top"
+  },
   "properties": {
     "object1": {
-      "title": "嵌套对象",
-      "description": "测试对象嵌套功能",
+      "title": "嵌套对象1",
       "type": "object",
       "properties": {
         "objectKey_1": {
           "title": "输入框",
           "type": "string",
           "ui-widget": "input",
-          "format": "email",
           "ui-grid-props": {
             "span": 8
           }
@@ -20,6 +21,7 @@
           "type": "number",
           "ui-widget": "input-number",
           "min": 2,
+          "required": true,
           "ui-grid-props": {
             "span": 8
           }
@@ -28,162 +30,21 @@
     },
     "object2": {
       "title": "嵌套对象2",
-      "description": "测试对象嵌套功能",
       "type": "object",
-      "required": true,
       "ui-widget": "object-card",
       "properties": {
         "objectKey_1": {
           "title": "输入框",
           "type": "string",
           "ui-widget": "input",
-          "ui-grid-props": {
-            "span": 24
-          }
+          "required": true
         },
         "objectKey_2": {
           "title": "数字输入框",
           "type": "number",
-          "ui-widget": "input-number",
-          "ui-grid-props": {
-            "span": 24
-          }
+          "ui-widget": "input-number"
         }
       }
-    },
-    "listKey": {
-      "title": "嵌套字符串数组",
-      "description": "嵌套功能",
-      "type": "array",
-      "min": 1,
-      "max": 3,
-      "required": true,
-      "ui-widget": "array-basic",
-      "items": {
-        "title": "字符串",
-        "type": "string",
-        "ui-widget": "input"
-      }
-    },
-    "listKey2": {
-      "title": "嵌套对象数组",
-      "description": "测试对象数组嵌套功能",
-      "type": "array",
-      "min": 1,
-      "max": 3,
-      "required": true,
-      "ui-widget": "array-base",
-      "items": {
-        "type": "object",
-        "properties": {
-          "nest1": {
-            "title": "输入框",
-            "type": "string",
-            "ui-widget": "input",
-            "ui-grid-props": {
-              "span": 12
-            }
-          },
-          "nest2": {
-            "title": "数字输入框",
-            "type": "number",
-            "ui-widget": "input-number",
-            "ui-grid-props": {
-              "span": 12
-            }
-          }
-        }
-      }
-    },
-    "listKey3": {
-      "title": "数组表格",
-      "description": "测试对象数组嵌套功能",
-      "type": "array",
-      "min": 1,
-      "max": 3,
-      "required": true,
-      "ui-widget": "array-table",
-      "items": {
-        "type": "object",
-        "properties": {
-          "nest1": {
-            "title": "姓名",
-            "type": "string",
-            "ui-widget": "input",
-            "ui-grid-props": {
-              "span": 12
-            }
-          },
-          "nest2": {
-            "title": "年龄",
-            "type": "number",
-            "ui-widget": "input-number",
-            "ui-grid-props": {
-              "span": 12
-            }
-          }
-        }
-      }
-    },
-    "selectKey": {
-      "title": "下拉单选",
-      "type": "string",
-      "ui-widget": "select",
-      "ui-props": {
-        "options": [
-          { "label": "早", "value": "a" },
-          { "label": "中", "value": "b" },
-          { "label": "晚", "value": "c" }
-        ]
-      }
-    },
-    "selectKey2": {
-      "title": "下拉多选",
-      "type": "array",
-      "ui-widget": "multi-select",
-      "ui-props": {
-        "options": [
-          { "label": "北京", "value": "a" },
-          { "label": "上海", "value": "b" },
-          { "label": "杭州", "value": "c" }
-        ]
-      }
-    },
-    "radioKey": {
-      "title": "点击单选",
-      "type": "string",
-      "ui-widget": "radio-group",
-      "ui-props": {
-        "options": [
-          { "label": "早", "value": "a" },
-          { "label": "中", "value": "b" },
-          { "label": "晚", "value": "c" }
-        ]
-      }
-    },
-    "checkboxKey": {
-      "title": "点击多选",
-      "type": "array",
-      "ui-widget": "checkbox-group",
-      "ui-props": {
-        "options": [
-          { "label": "北京", "value": "a" },
-          { "label": "上海", "value": "b" },
-          { "label": "杭州", "value": "c" }
-        ]
-      }
-    },
-    "switchKey": {
-      "title": "开关",
-      "type": "boolean",
-      "ui-widget": "switch"
-    },
-    "textareaKey": {
-      "title": "长文本输入框",
-      "type": "string",
-      "ui-widget": "textarea",
-      "dependencies": ["switchKey"],
-      "ui-hidden": "{{ $deps[0] }}"
     }
   }
 }

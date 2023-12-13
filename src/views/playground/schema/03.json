@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "switchKey": {
+      "title": "开关",
+      "type": "boolean",
+      "ui-widget": "switch"
+    },
+    "textareaKey": {
+      "title": "长文本输入框",
+      "type": "string",
+      "ui-widget": "textarea",
+      "dependencies": [
+        "switchKey"
+      ],
+      "ui-hidden": "{{ $deps[0] }}"
+    }
+  }
+}
