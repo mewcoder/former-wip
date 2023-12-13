@@ -65,7 +65,7 @@ export default defineComponent({
 <style scoped>
 .array-base {
   padding: 16px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid #d9d9d9;
   border-radius: 4px;
   flex: 1;
   color: #606266;
@@ -74,7 +74,7 @@ export default defineComponent({
 .array-item {
   margin-bottom: 12px;
   position: relative;
-  border: 1px solid #dcdfe6;
+  border: 1px solid #d9d9d9;
   padding: 0 12px 12px 12px;
   border-radius: 4px;
 }

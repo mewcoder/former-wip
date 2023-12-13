@@ -22,7 +22,7 @@ export default defineComponent({
 <style scoped>
 .object-card {
   padding: 18px;
-  border: 1px solid #dcdfe6;
+  border: 1px solid #d9d9d9;
   border-radius: 4px;
   flex: 1;
   margin-bottom: 18px;
