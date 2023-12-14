@@ -58,7 +58,7 @@ export default defineComponent({
       }
     })
 
-    const children = getChildren(props.schema, ctx.config)
+    const children = getChildren(ctx.config, props.schema)
 
     return () =>
       h(

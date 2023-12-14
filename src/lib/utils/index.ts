@@ -16,10 +16,8 @@ export function isExpression(expression: any) {
 }
 
 export function parseExpression(expression: any, formData, dependencies) {
-  const $deps = dependencies || []
-
   const scope = {
-    $deps
+    $deps: dependencies || []
   }
 
   if (typeof expression === 'string') {
@@ -33,6 +31,7 @@ export function parseExpression(expression: any, formData, dependencies) {
         JSON.stringify(formData) + '[$1]'
       )}
     `
+
     try {
       const result = new Function('$root', `with($root) { ${funcStr} }`)(scope)
       return result

@@ -2,7 +2,7 @@
   <div class="playground">
     <header class="bar">
       <div class="title">
-        <span style="margin-right: 20px">🎮 VueFormer Playground</span>
+        <span style="margin-right: 20px">🌌 DynaForm Playground</span>
         <div style="margin-top: 10px">
           <el-radio-group v-model="curJson" size="small">
             <el-radio-button
@@ -16,18 +16,20 @@
       </div>
       <div class="ui">
         <div>
-          <div style="margin-bottom: 8px">组件库：</div>
-          <el-radio-group v-model="curUI" size="small">
-            <el-radio-button label="ep">Element Plus</el-radio-button>
-            <el-radio-button label="antdv">Ant Design Vue</el-radio-button>
+          <el-radio-group v-model="curUI">
+            <el-radio label="ep">Element Plus</el-radio>
+            <el-radio label="antdv">Ant Design Vue</el-radio>
           </el-radio-group>
         </div>
-        <el-button @click="forceUpdate">强制刷新</el-button>
+        <div>
+          <el-button @click="showDrawer = true">查看数据</el-button>
+          <el-button type="danger" @click="forceUpdate">渲染刷新</el-button>
+        </div>
       </div>
     </header>
     <main class="container">
       <div id="editor">
-        <MonocoEditor v-model="jsonStr" />
+        <MonacoEditor ref="editorRef" v-model="jsonStr" />
       </div>
       <div id="preview">
         <SchemaRender
@@ -35,15 +37,16 @@
           ref="formRef"
           :schema="schema"
           :config="config"
+          :model="formData"
         >
-          <el-button type="primary" @click="test">提交</el-button>
+          <el-button type="primary" @click="submit">提交</el-button>
         </SchemaRender>
       </div>
     </main>
   </div>
-  <el-drawer v-model="showDrawer" title="FormData">
-    <MonocoEditor
-      v-model="formStr"
+  <el-drawer v-if="showDrawer" v-model="showDrawer" title="FormData">
+    <MonacoEditor
+      v-model="formDataStr"
       :readOnly="true"
       :minimap="{ enabled: false }"
       lineNumbers="off"
@@ -51,8 +54,8 @@
   </el-drawer>
 </template>
 <script lang="ts" setup>
-import { ref, shallowRef, computed, watch, onMounted } from 'vue'
-import MonocoEditor from '@/components/MonacoEditor/index.vue'
+import { ref, shallowRef, computed, watch, onMounted, reactive } from 'vue'
+import MonacoEditor from '@/components/MonacoEditor/index.vue'
 import json0 from './schema/00.json'
 import json1 from './schema/01.json'
 import json2 from './schema/02.json'
@@ -77,16 +80,18 @@ const jsonStr = ref('{}')
 
 const curJson = ref(Number(route.query.json) || 0)
 
+const editorRef = ref()
+
 const refreshKey = ref(0)
 
-const showDrawer = ref(false)
-const formStr = ref('{}')
+let formData = reactive({})
 
 watch(
   () => curJson.value,
   (val) => {
+    editorRef.value?.scrollToTop()
     jsonStr.value = JSON.stringify(jsonList[val], null, 2)
-    refreshKey.value++
+    forceUpdate()
     router.replace({
       query: {
         ...route.query,
@@ -129,13 +134,16 @@ const schema = computed(() => {
 })
 
 const formRef = ref()
+const showDrawer = ref(false)
 
-const test = async () => {
+const formDataStr = computed(() => {
+  return JSON.stringify(formData, null, 2)
+})
+
+const submit = async () => {
   try {
-    const data = formRef.value.getFormData()
     const valid = await formRef.value.getFormInstance()?.validate()
     if (valid) {
-      formStr.value = JSON.stringify(data, null, 2)
       showDrawer.value = true
     }
   } catch (error) {
@@ -143,7 +151,8 @@ const test = async () => {
   }
 }
 
-const forceUpdate = () => {
+function forceUpdate() {
+  formData = reactive({})
   refreshKey.value++
 }
 
@@ -175,14 +184,16 @@ const options = [
 .bar {
   display: flex;
   justify-content: space-between;
-  height: 80px;
-  padding: 16px;
+  height: 72px;
+  padding: 8px 16px;
   border-bottom: 1px solid darkgray;
 
   .ui {
     width: 50%;
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
+    padding-left: 16px;
   }
   .title {
     font-weight: 600;
@@ -191,7 +202,7 @@ const options = [
 }
 
 .container {
-  height: calc(100% - 80px);
+  height: calc(100% - 72px);
   display: flex;
   #editor {
     height: 100%;

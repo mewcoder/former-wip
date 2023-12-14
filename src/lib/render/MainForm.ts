@@ -24,22 +24,26 @@ export default defineComponent({
       type: Object as PropType<PresetConfig>,
       default: () => ({}),
       required: true
+    },
+    model: {
+      type: Object
     }
   },
   inheritAttrs: true,
   setup(props, { expose, slots }) {
     const formRef = ref(null)
 
+    // todo 初始化
     const formData = reactive({})
 
     expose({
       getFormInstance: () => formRef.value,
-      getFormData: () => formData
+      getFormData: () => props.model || formData
     })
 
     provide(ContextSymbol, {
       schema: props.schema,
-      formData,
+      formData: props.model || formData,
       config: props.config
     })
 
@@ -59,7 +63,7 @@ export default defineComponent({
           ...presetProps,
           ...props.schema[SchemaKeys.FormProps],
           ref: formRef,
-          [modelProp]: formData,
+          [modelProp]: props.model || formData,
           onSubmit: withModifiers(
             (e) => {
               e.preventDefault()
@@ -69,7 +73,7 @@ export default defineComponent({
         },
         () => [
           h(SchemaField, {
-            schema: props.schema
+            schema: reactive(props.schema)
           }),
           // 默认插槽
           slots.default?.()

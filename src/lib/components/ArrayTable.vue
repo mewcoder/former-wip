@@ -14,7 +14,7 @@
             <SchemaField
               :schema="item.schema"
               :path="path"
-              :prop="scope.$index + item.key"
+              :prop="`${scope.$index}.${item.key}`"
               :show-title="false"
             />
           </template>

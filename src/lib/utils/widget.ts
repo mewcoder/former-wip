@@ -7,9 +7,17 @@ import type {
 } from '../types'
 import { SchemaKeys } from '../shared'
 
+// 判断是配置对象
+export function isWidgetPresetConfig(
+  config: any
+): config is WidgetPresetConfig {
+  return typeof config === 'object' && 'widget' in config
+}
+
+// 获取组件预置配置
 function getWidgetPresetConfig(
-  widgetType: string,
-  config: PresetConfig
+  config: PresetConfig,
+  widgetType: string
 ): WidgetPresetConfig | undefined {
   if (!widgetType) {
     console.warn('widget is required')
@@ -24,13 +32,7 @@ function getWidgetPresetConfig(
   return widgetConfig
 }
 
-// 判断是配置对象
-export function isWidgetPresetConfig(
-  config: any
-): config is WidgetPresetConfig {
-  return typeof config === 'object' && 'widget' in config
-}
-
+// 通过组件类型获取组件
 export function getComponentByType(
   config: PresetConfig,
   widgetType: string
@@ -39,7 +41,7 @@ export function getComponentByType(
   presetProps: object
 } {
   // 获取预设配置
-  const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
+  const widgetPresetConfig = getWidgetPresetConfig(config, widgetType)
 
   const component: ConcreteComponent | string =
     widgetPresetConfig?.widget || widgetType
@@ -57,6 +59,7 @@ export function getComponentByType(
       }
 }
 
+// 通过schema获取组件
 export function getComponent(
   config: PresetConfig,
   schema: { [SchemaKeys.WidgetType]?: string },
@@ -91,7 +94,7 @@ export function getMappingProp(
   defaultProp: string
 ) {
   if (!widgetType) return defaultProp
-  const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
+  const widgetPresetConfig = getWidgetPresetConfig(config, widgetType)
   if (widgetPresetConfig) {
     return widgetPresetConfig?.propMapping?.[prop] || defaultProp
   }
@@ -100,8 +103,8 @@ export function getMappingProp(
 
 // options 映射成 children
 export function getChildren(
-  schema: Schema,
-  config: PresetConfig
+  config: PresetConfig,
+  schema: Schema
 ): WidgetChildrenItem[] {
   if (schema[SchemaKeys.WidgetChildren])
     return schema[SchemaKeys.WidgetChildren]
@@ -110,7 +113,7 @@ export function getChildren(
 
   if (!widgetType) return []
 
-  const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
+  const widgetPresetConfig = getWidgetPresetConfig(config, widgetType)
 
   if (widgetPresetConfig && widgetPresetConfig?.generateChildren) {
     return widgetPresetConfig.generateChildren(

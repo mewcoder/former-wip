@@ -4,17 +4,30 @@
     "label-width": 100
   },
   "properties": {
+    "input": {
+      "title": "输入框",
+      "type": "string",
+      "ui-widget": "input"
+    },
     "switchKey": {
       "title": "开关",
       "type": "boolean",
       "ui-widget": "switch"
     },
+    "numberKey": {
+      "title": "数字输入框",
+      "type": "number",
+      "ui-widget": "input-number"
+    },
     "textareaKey": {
       "title": "长文本输入框",
       "type": "string",
       "ui-widget": "textarea",
-      "dependencies": ["switchKey"],
-      "ui-hidden": "{{ $deps[0] }}"
+      "dependencies": ["switchKey", "numberKey"],
+      "ui-hidden": "{{ $deps[0] }}",
+      "ui-props": {
+        "rows": "{{ $deps[1] }}"
+      }
     }
   }
 }

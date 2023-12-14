@@ -42,8 +42,6 @@ watch(
 
 const attrs = useAttrs()
 
-console.log(attrs)
-
 onMounted(() => {
   monacoEditor = monaco.editor.create(editorRef.value, {
     value: props.modelValue,
@@ -60,6 +58,12 @@ onMounted(() => {
     emit('update:modelValue', currenValue)
   })
 })
+
+function scrollToTop() {
+  monacoEditor?.setScrollPosition({ scrollTop: 0 })
+}
+
+defineExpose({ scrollToTop })
 </script>
 
 <script lang="ts">
