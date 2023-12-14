@@ -1,12 +1,12 @@
 import {
-  ref,
   watch,
   computed,
   defineComponent,
   h,
   inject,
   type Component,
-  type PropType
+  type PropType,
+  reactive
 } from 'vue'
 import { ContextSymbol, defaultCtx } from '../shared/context'
 import {
@@ -16,11 +16,14 @@ import {
   isVoidField,
   parseExpression,
   isExpression,
-  getPath
+  getPath,
+  setValue,
+  cloneDeep
 } from '../utils'
 import { BasicField, ObjectField, ArrayField, VoidField } from './field'
 import type { Schema } from '../types'
 import { SchemaKeys } from '../shared'
+
 
 // 递归渲染
 export default defineComponent({
@@ -51,7 +54,7 @@ export default defineComponent({
     } else if (isArrayField(props.schema)) {
       Field = ArrayField // 嵌套数组
     } else if (isVoidField(props.schema)) {
-      Field = VoidField // UI组件
+      Field = VoidField // 纯UI组件
     } else {
       Field = BasicField // 普通表单项
     }
@@ -60,36 +63,31 @@ export default defineComponent({
       return getPath(props.path, props.prop)
     })
 
-    const hidden = ref(false)
+    const currentSchema = reactive(cloneDeep(props.schema))
 
-    // 联动
     const deps = props.schema.dependencies
 
     if (deps) {
+      const linkMap: Record<string, string> = getLinkMap(props.schema)
+      console.log('linkMap', linkMap)
       watch(
         deps.map((path) => () => ctx.formData[path]),
-        () => {
-          let hid = false
-          const val = props.schema[SchemaKeys.Hidden]
-          if (val) {
-            if (isExpression(val)) {
-              hid = parseExpression(val, ctx.formData, deps)
-            } else {
-              hid = true
-            }
-          } else {
-            hid = false
-          }
-          hidden.value = hid
+        (val) => {
+          console.log('deps change', val)
+          Object.entries(linkMap).forEach(([p, exp]) => {
+            setValue(currentSchema, p, parseExpression(exp, ctx.formData, deps))
+          })
+        },
+        {
+          immediate: true
         }
       )
     }
 
     return () => {
-      if (hidden.value) return null
-
+      if (currentSchema[SchemaKeys.Hidden]) return null
       return h(Field, {
-        schema: props.schema,
+        schema: currentSchema,
         path: path.value,
         prop: path.value.join('.'),
         ...attrs
@@ -97,3 +95,22 @@ export default defineComponent({
     }
   }
 })
+
+function getLinkMap(schema) {
+  const result = {}
+
+  const traverse = (schema, map, lastPath = '') => {
+    Object.entries(schema).forEach(([key, val]) => {
+      const path = lastPath ? `${lastPath}.${key}` : key
+      if (typeof val === 'object' && key.startsWith('ui')) {
+        traverse(val, map, path)
+      } else if (isExpression(val)) {
+        map[path] = val
+      }
+    })
+  }
+
+  traverse(schema, result)
+
+  return result
+}
