@@ -65,6 +65,12 @@ export function getComponent(
   component: ConcreteComponent | string
   presetProps: object
 } {
+  if (schema[SchemaKeys.HtmlType])
+    return {
+      component: schema[SchemaKeys.HtmlType],
+      presetProps: {}
+    }
+
   const widgetType = schema[SchemaKeys.WidgetType] || defaultWidgetType
 
   if (!widgetType) {
@@ -97,13 +103,16 @@ export function getChildren(
   schema: Schema,
   config: PresetConfig
 ): WidgetChildrenItem[] {
+  if (schema[SchemaKeys.WidgetChildren])
+    return schema[SchemaKeys.WidgetChildren]
+
   const widgetType = schema[SchemaKeys.WidgetType]
+
   if (!widgetType) return []
+
   const widgetPresetConfig = getWidgetPresetConfig(widgetType, config)
 
-  if (schema[SchemaKeys.WidgetChildren]) {
-    return schema[SchemaKeys.WidgetChildren]
-  } else if (widgetPresetConfig && widgetPresetConfig?.generateChildren) {
+  if (widgetPresetConfig && widgetPresetConfig?.generateChildren) {
     return widgetPresetConfig.generateChildren(
       schema?.[SchemaKeys.WidgetProps]?.options || []
     )

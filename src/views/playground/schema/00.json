@@ -4,6 +4,14 @@
     "label-width": 100
   },
   "properties": {
+    "void": {
+      "type": "void",
+      "ui-html": "h3",
+      "ui-children": ["基础表单"],
+      "ui-props": {
+        "style": "text-align: center;"
+      }
+    },
     "input1": {
       "title": "输入框",
       "type": "string",

@@ -72,3 +72,7 @@ export function isArrayField(schema: Schema) {
 export function isEmptyField(schema: Schema) {
   return !schema || Object.keys(schema).length === 0
 }
+
+export function isVoidField(schema: Schema) {
+  return schema.type === 'void'
+}

@@ -13,11 +13,12 @@ import {
   isEmptyField,
   isObjectField,
   isArrayField,
+  isVoidField,
   parseExpression,
   isExpression,
   getPath
 } from '../utils'
-import { BasicField, ObjectField, ArrayField } from './field'
+import { BasicField, ObjectField, ArrayField, VoidField } from './field'
 import type { Schema } from '../types'
 import { SchemaKeys } from '../shared'
 
@@ -49,6 +50,8 @@ export default defineComponent({
       Field = ObjectField // 嵌套对象
     } else if (isArrayField(props.schema)) {
       Field = ArrayField // 嵌套数组
+    } else if (isVoidField(props.schema)) {
+      Field = VoidField // UI组件
     } else {
       Field = BasicField // 普通表单项
     }
