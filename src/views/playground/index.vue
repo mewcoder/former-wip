@@ -37,7 +37,8 @@
           ref="formRef"
           :schema="schema"
           :config="config"
-          :model="formData"
+          :model="data.formData"
+          label-position="top"
         >
           <el-button type="primary" @click="submit">提交</el-button>
         </SchemaRender>
@@ -84,7 +85,7 @@ const editorRef = ref()
 
 const refreshKey = ref(0)
 
-let formData = reactive({})
+const data = reactive({ formData: {} })
 
 watch(
   () => curJson.value,
@@ -137,7 +138,8 @@ const formRef = ref()
 const showDrawer = ref(false)
 
 const formDataStr = computed(() => {
-  return JSON.stringify(formData, null, 2)
+  console.log(data.formData)
+  return JSON.stringify(data.formData, null, 2)
 })
 
 const submit = async () => {
@@ -152,7 +154,7 @@ const submit = async () => {
 }
 
 function forceUpdate() {
-  formData = reactive({})
+  data.formData = {}
   refreshKey.value++
 }
 

@@ -5,6 +5,7 @@ import {
   h,
   provide,
   withModifiers,
+  useAttrs,
   type PropType
 } from 'vue'
 import { ContextSymbol } from '../shared/context'
@@ -55,6 +56,8 @@ export default defineComponent({
 
     // 表单数据绑定的key, 如: model
     const modelProp = getMappingProp(props.config, 'form', 'model', 'model')
+
+    const attrs = useAttrs()
 
     return () =>
       h(
