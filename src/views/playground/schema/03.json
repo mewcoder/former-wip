@@ -1,5 +1,8 @@
 {
   "type": "object",
+  "ui-form-props": {
+    "label-width": 100
+  },
   "properties": {
     "switchKey": {
       "title": "开关",
@@ -10,9 +13,7 @@
       "title": "长文本输入框",
       "type": "string",
       "ui-widget": "textarea",
-      "dependencies": [
-        "switchKey"
-      ],
+      "dependencies": ["switchKey"],
       "ui-hidden": "{{ $deps[0] }}"
     }
   }

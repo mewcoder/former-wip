@@ -20,7 +20,10 @@ export default {
       }
     },
     'row': {
-      widget: 'el-row'
+      widget: 'el-row',
+      props: {
+        gutter: 16
+      }
     },
     'col': {
       widget: 'el-col'

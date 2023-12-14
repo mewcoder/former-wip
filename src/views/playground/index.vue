@@ -16,10 +16,10 @@
       </div>
       <div class="ui">
         <div>
-          <span style="margin-right: 10px">组件库：</span>
-          <el-radio-group v-model="curUI">
-            <el-radio label="ep">Element Plus</el-radio>
-            <el-radio label="antdv">Ant Design Vue</el-radio>
+          <div style="margin-bottom: 8px">组件库：</div>
+          <el-radio-group v-model="curUI" size="small">
+            <el-radio-button label="ep">Element Plus</el-radio-button>
+            <el-radio-button label="antdv">Ant Design Vue</el-radio-button>
           </el-radio-group>
         </div>
         <el-button @click="forceUpdate">强制刷新</el-button>
@@ -51,7 +51,7 @@
   </el-drawer>
 </template>
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, shallowRef, computed, watch, onMounted } from 'vue'
 import MonocoEditor from '@/components/MonacoEditor/index.vue'
 import json0 from './schema/00.json'
 import json1 from './schema/01.json'
@@ -61,6 +61,11 @@ import { SchemaRender } from '@/lib'
 import epConfig from '@/lib/presets/element-plus'
 import antdvConfig from '@/lib/presets/antdv'
 import Split from 'split.js'
+import { useRouter, useRoute } from 'vue-router'
+
+const router = useRouter()
+
+const route = useRoute()
 
 const jsonList = [json0, json1, json2, json3]
 
@@ -70,7 +75,7 @@ onMounted(() => {
 
 const jsonStr = ref('{}')
 
-const curJson = ref(0)
+const curJson = ref(Number(route.query.json) || 0)
 
 const refreshKey = ref(0)
 
@@ -82,6 +87,37 @@ watch(
   (val) => {
     jsonStr.value = JSON.stringify(jsonList[val], null, 2)
     refreshKey.value++
+    router.replace({
+      query: {
+        ...route.query,
+        json: val
+      }
+    })
+  },
+  {
+    immediate: true
+  }
+)
+
+const curUI = ref(String(route.query.ui) || 'ep')
+const config = shallowRef(epConfig)
+watch(
+  () => curUI.value,
+  (val) => {
+    switch (val) {
+      case 'ep':
+        config.value = epConfig
+        break
+      case 'antdv':
+        config.value = antdvConfig
+        break
+    }
+    router.replace({
+      query: {
+        ...route.query,
+        ui: val
+      }
+    })
   },
   {
     immediate: true
@@ -93,19 +129,6 @@ const schema = computed(() => {
 })
 
 const formRef = ref()
-
-const curUI = ref('ep')
-
-const config = computed(() => {
-  switch (curUI.value) {
-    case 'ep':
-      return epConfig
-    case 'antdv':
-      return antdvConfig
-    default:
-      return epConfig
-  }
-})
 
 const test = async () => {
   try {
@@ -160,7 +183,6 @@ const options = [
     width: 50%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
   .title {
     font-weight: 600;

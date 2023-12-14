@@ -1,5 +1,5 @@
 <template>
-  <FormItemWrapper :schema="schema">
+  <FormItemWrapper :schema="schema" :prop="prop">
     <div class="object-base">
       <slot></slot>
     </div>
@@ -17,6 +17,9 @@ export default defineComponent({
     schema: {
       type: Object as PropType<Schema>,
       required: true
+    },
+    prop: {
+      type: String
     }
   },
   inheritAttrs: false
